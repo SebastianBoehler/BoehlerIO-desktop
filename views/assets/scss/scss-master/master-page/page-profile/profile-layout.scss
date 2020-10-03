@@ -1,0 +1,123 @@
+
+
+// Utitlities
+
+@import "../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Page - Profile - Layout -------------------- //
+
+.profile {
+
+    // Information
+
+    .information {
+
+        > .container {
+            @include py-4;
+
+            max-width           : 1000px;
+        }
+
+        .info-text {
+            @include p-5;
+
+            background-color    : $c-white;
+
+            border-radius       : 0.5em;
+
+            .title {
+                @include mb-3;
+            }
+        }
+
+        .info-date {
+            @include height-100;
+
+            @include p-5;
+
+            background-color    : $c-white;
+
+            border-radius       : 0.5em;
+
+            .title {
+                @include mb-3;
+            }
+
+            .time {
+                @include text-align-center;
+
+                border          : 1px solid $c-grey-super-light;
+
+                #date {
+                    @include mb-2;
+                }
+            }
+        }
+
+        @include media-breakpoint-down(md) {
+
+            > .container {
+                > .row {
+                    .col-outer {
+                        &:first-child {
+                            @include mb-4;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Profile Form
+
+    .profile-form {
+
+        > .container {
+            @include py-4;
+
+            max-width           : 1000px;
+        }
+
+        .form {
+            @include p-5;
+
+            background-color    : $c-white;
+
+            border-radius       : 0.5em;
+
+            .form-text {
+                .title {
+                    @include mb-3;
+                }
+            }
+
+            form {
+                > .row {
+                    .col-inner {
+                        &:first-child {
+                            @include pr-5;
+                        }
+
+                        &:last-child {
+                            > .row {
+                                &:last-child {
+                                    @include text-align-right;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include media-breakpoint-down(md) {
+
+            .form {
+                .form-text {
+                    @include mb-4;
+                }
+            }
+        }
+    }
+}
+

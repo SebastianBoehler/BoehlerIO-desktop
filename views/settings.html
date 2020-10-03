@@ -1,0 +1,328 @@
+﻿<!--<!DOCTYPE html>-->
+
+<html>
+<head>
+
+    <!-- Title -->
+
+    <title>
+        BoehlerIO - Setting
+    </title>
+
+    <!-- Meta -->
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!------- Font ------->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!------- CSS ------->
+
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/vendor/slick/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick/slick.css">
+
+    <link rel="stylesheet" href="assets/css/Css-Master.min.css">
+</head>
+
+<!-- Desktop -->
+
+<body onload="startTime()">
+
+    <!--Wrapper - Outer-->
+
+    <div class="wrapper outer">
+
+        <!--Sidebar-->
+
+        <div class="sidebar sidebar-primary">
+            <div class="sidebar-logo">
+                <div class="logo">
+                    <a class="sidebar-brand" href="/">
+                        <span></span> Boehler IO
+                    </a>
+                </div>
+            </div>
+            <div class="sidebar-content">
+                <div class="content-link">
+                    <div class="link-item">
+                        <a class="side-link primary" href="/">
+                            <span class="side-for-icon">
+                                <i class="fas fa-home"></i>
+                            </span>
+                            <span class="side-for-text">
+                                Home
+                            </span>
+                        </a>
+                    </div>
+                    <div class="link-item">
+                        <a class="side-link primary active" href="/settings">
+                            <span class="side-for-icon">
+                                <i class="fas fa-cog"></i>
+                            </span>
+                            <span class="side-for-text">
+                                Settings
+                            </span>
+                        </a>
+                    </div>
+                    <div class="link-item">
+                        <a class="side-link primary" href="/profiles">
+                            <span class="side-for-icon">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span class="side-for-text">
+                                Profiles
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-copyright">
+                <div class="copyright-text">
+                    <div class="desc">
+                        <p>
+                            © Copyright 2020
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Overlay-->
+
+        <div class="sidebar-overlay"></div>
+
+        <!--Page-->
+
+        <div class="page">
+
+            <!--Navbar-->
+
+            <nav class="navbar navbar-primary sticky-top">
+                <div class="container">
+                    <a class="nav-toggle" href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </div>
+            </nav>
+
+            <!--Setting-->
+
+            <div class="setting">
+
+                <!--Information-->
+
+                <div class="section information">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-outer col-12 col-md-12 col-lg-9">
+                                <div class="info-text">
+                                    <div class="title">
+                                        <h1>
+                                            Settings
+                                        </h1>
+                                    </div>
+                                    <div class="desc">
+                                        <p>
+                                            Please make sure to read our detailed setup guide to learn more about the settings and their functionality
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-outer col-12 col-md-12 col-lg-3">
+                                <div class="info-date" id="clockdate">
+                                    <div class="title">
+                                        <h3>
+                                            Time
+                                        </h3>
+                                    </div>
+                                    <div class="time">
+                                        <div id="date"></div>
+                                        <div id="clock"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Setting Form-->
+
+                <div class="section setting-form">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-outer col-12 col-md-12 col-lg-12">
+                                <div class="form">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-inner col-12 col-md-12 col-lg-5">
+                                                <div class="form-text">
+                                                    <div class="title">
+                                                        <h3>
+                                                            Checkout Settings
+                                                        </h3>
+                                                    </div>
+                                                    <div class="desc">
+                                                        <p>
+                                                            These settings affect the checkout process
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-inner col-12 col-md-12 col-lg-7">
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Checkout Delay (ms)
+                                                            </label>
+                                                            <input type="number" class="form-control" id="CheckoutDelay" placeholder="1500ms" step="100" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-check check-primary">
+                                                            <input type="checkbox" class="form-check-input" id="storeScreenshot">
+                                                            <label class="form-check-label">
+                                                                Store confirmation page screenshot on success
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-inner col-12 col-md-12 col-lg-5">
+                                                <div class="form-text">
+                                                    <div class="title">
+                                                        <h3>
+                                                            Add to Cart Settings
+                                                        </h3>
+                                                    </div>
+                                                    <div class="desc">
+                                                        <p>
+                                                            These settings affect the add to cart process
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-inner col-12 col-md-12 col-lg-7">
+                                                <div class="row">
+                                                    <div class="col-12 col-md" style="display: none;">
+                                                        <div class="form-select select-primary">
+                                                            <label>
+                                                                Example select
+                                                            </label>
+                                                            <select class="form-control" id="exampleFormControlSelect1">
+                                                                <option disabled selected>
+                                                                    Select here
+                                                                </option>
+                                                                <option>
+                                                                    Option 1
+                                                                </option>
+                                                                <option>
+                                                                    Option 2
+                                                                </option>
+                                                                <option>
+                                                                    Option 3
+                                                                </option>
+                                                                <option>
+                                                                    Option 4
+                                                                </option>
+                                                                <option>
+                                                                    Option 5
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Add to cart delay (ms)
+                                                            </label>
+                                                            <input type="number" class="form-control" id="atcDelay" placeholder="500ms" step="100"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-check check-primary">
+                                                            <input type="checkbox" class="form-check-input">
+                                                            <label class="form-check-label">
+                                                                Always cart highest available quantity
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-inner col-12 col-md-12 col-lg-5">
+                                                <div class="form-text">
+                                                    <div class="title">
+                                                        <h3>
+                                                            General Settings
+                                                        </h3>
+                                                    </div>
+                                                    <div class="desc">
+                                                        <p>
+                                                            General settings like discord stuff ...
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-inner col-12 col-md-12 col-lg-7">
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                discord Webhook
+                                                            </label>
+                                                            <input type="text" class="form-control" id="discordWebhook"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-check check-primary">
+                                                            <input type="checkbox" class="form-check-input">
+                                                            <label class="form-check-label">
+                                                                Enable discord notifications
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <button type="submit" class="btn btn-block btn-form">
+                                                            Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!------- Script ------->
+
+    <script src="assets/javascript/jquery.min.js"></script>
+
+    <script src="assets/javascript/vendor-javascript.js"></script>
+    <script src="assets/javascript/bootstrap/bootstrap.min.js"></script>
+    <script src="assets/javascript/custom-javascript.js"></script>
+</body>
+</html>

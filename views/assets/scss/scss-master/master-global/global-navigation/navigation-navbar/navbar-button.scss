@@ -1,0 +1,40 @@
+
+
+// Utitlities
+
+@import "../../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Navigation - Navbar - Button -------------------- //
+
+.navbar {
+    
+    // Primary
+
+    &.navbar-primary {
+        .nav-toggle {
+            @include display-none;
+        }
+
+        @include media-breakpoint-down(sm) {
+
+            .nav-toggle {
+                @include display-inline-flex;
+
+                @include align-items-center;
+
+                justify-content         : center;
+
+                float                   : right;
+
+                width                   : 2rem;
+                height                  : 2rem;
+
+                background-color        : $c-primary-normal;
+            
+                i {
+                    color               : $c-white;
+                }
+            }
+        }
+    }
+}

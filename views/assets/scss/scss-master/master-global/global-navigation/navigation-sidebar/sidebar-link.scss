@@ -1,0 +1,180 @@
+
+
+// Utitlities
+
+@import "../../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Navigation - Sidebar - Link -------------------- //
+
+.sidebar {
+
+    // Primary
+
+    &.sidebar-primary {
+
+        // Logo
+
+        .sidebar-logo {
+            .sidebar-brand {
+                @include display-flex;
+
+                @include align-items-center;
+
+                @include mx-0;
+
+                @include font-primary-semi-bold;
+                @include h5;
+
+                @include text-transform-uppercase;
+                @include text-decoration-none;
+
+                justify-content     : center;
+
+                color               : $c-black;
+
+                span {
+                    @include mr-2;
+
+                    width                   : 2.5rem;
+                    height                  : 2.5rem;
+
+                    background-color        : $c-primary-normal;
+                    border-radius           : 100%
+                }
+            }
+        }
+
+        // Content
+
+        .sidebar-content {
+            .content-link {
+                .side-link {
+                    @include position-relative;
+
+                    @include display-block;
+
+                    @include py-3;
+                    @include px-4;
+
+                    @include font-primary-medium;
+                    @include p;
+
+                    @include text-decoration-none;
+
+                    opacity     : 0.75;
+
+                    color       : $c-black;
+
+                    &:before {
+                        @include position-absolute;
+
+                        @include height-100;
+
+                        content             : '';
+
+                        top                 : 0;
+                        left                : 0;
+
+                        background-color    : $c-primary-normal;
+                    }
+
+                    .side-for-icon {
+                        i {
+                            color   : $c-black;
+                        }
+                    }
+
+                    .side-for-text {
+                        @include ml-2;
+                    }
+
+                    // Primary
+
+                    &.primary {
+                        &.active {
+                            opacity                 : 1;
+
+                            background-color        : $c-grey-super-light;
+
+                            transition              : 0.5s ease;
+
+                            &:before {
+                                width               : 0.25rem;
+                            }
+
+                            .side-for-icon {
+                                i {
+                                    color           : $c-primary-normal;
+                                }
+                            }
+                        }
+
+                        &:hover, &:focus, &:active {
+                            opacity                 : 1;
+
+                            background-color        : $c-grey-super-light;
+
+                            .side-for-icon {
+                                i {
+                                    color           : $c-primary-normal;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @include media-breakpoint-down(md) {
+
+            // Logo
+
+            .sidebar-logo {
+                .sidebar-brand {
+                    @include p;
+
+                    span {
+                        width                   : 1.75rem;
+                        height                  : 1.75rem;
+                    }
+                }
+            }
+
+            // Content
+
+            .sidebar-content {
+                .content-link {
+                    .side-link {
+                        @include small;
+                    }
+                }
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+
+            // Logo
+
+            .sidebar-logo {
+                .sidebar-brand {
+                    @include h5;
+
+                    span {
+                        width                   : 2.25rem;
+                        height                  : 2.25rem;
+                    }
+                }
+            }
+
+            // Content
+
+            .sidebar-content {
+                .content-link {
+                    .side-link {
+                        @include p;
+                    }
+                }
+            }
+        }
+    }
+}

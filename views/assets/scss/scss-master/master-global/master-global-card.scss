@@ -1,0 +1,90 @@
+
+
+// Utitlities
+
+@import "../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Master - Card -------------------- //
+
+// Info
+
+.info-card {
+
+    // Primary
+
+    &.card-primary {
+        @include height-100;
+
+        @include p-4;
+
+        background-color        : $c-primary-normal;
+        border-radius           : 0.5em;
+
+        .info-text {
+            .title {
+                h3 {
+                    @include font-primary-semi-bold;
+                    @include h5;
+
+                    color       : $c-white;
+
+                    i {
+                        @include mr-2;
+
+                        @include h4;
+
+                        color   : $c-white;
+                    }
+                }
+            }
+
+            .desc {
+                p {
+                    @include font-primary-light;
+                    @include small;
+
+                    color       : $c-white;
+                }
+            }
+        }
+    }
+
+    // Secondary
+
+    &.card-secondary {
+        @include height-100;
+
+        @include p-4;
+
+        background-color        : $c-quinary-normal;
+        border-radius           : 0.5em;
+
+        .info-text {
+            .title {
+                h3 {
+                    @include font-primary-semi-bold;
+                    @include h5;
+
+                    color       : $c-black;
+
+                    i {
+                        @include mr-2;
+
+                        @include h4;
+
+                        color   : $c-primary-normal;
+                    }
+                }
+            }
+
+            .desc {
+                p {
+                    @include font-primary-light;
+                    @include small;
+
+                    color       : $c-grey;
+                }
+            }
+        }
+    }
+}

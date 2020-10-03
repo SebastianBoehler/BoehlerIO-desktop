@@ -1,0 +1,22 @@
+
+
+// Utitlities
+
+@import "../../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Navigation - Navbar - Layout -------------------- //
+
+.navbar {
+    
+    // Primary
+
+    &.navbar-primary {
+
+        > .container {
+            @include display-block;
+
+            @include pt-2;
+            @include pb-0;
+        }
+    }
+}

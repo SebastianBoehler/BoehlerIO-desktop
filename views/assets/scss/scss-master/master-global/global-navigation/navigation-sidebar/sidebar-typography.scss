@@ -1,0 +1,47 @@
+
+
+// Utitlities
+
+@import "../../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Navigation - Sidebar - Typography -------------------- //
+
+.sidebar {
+    
+    // Primary
+
+    &.sidebar-primary {
+
+        // Copyright
+
+        .sidebar-copyright {
+            .copyright-text {
+                .desc {
+                    p {
+                        @include mb-0;
+
+                        @include font-primary-regular;
+                        @include p;
+
+                        color       : $c-white;
+                    }
+                }
+            }
+        }
+
+        @include media-breakpoint-down(md) {
+
+            // Copyright
+
+            .sidebar-copyright {
+                .copyright-text {
+                    .desc {
+                        p {
+                            @include small;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

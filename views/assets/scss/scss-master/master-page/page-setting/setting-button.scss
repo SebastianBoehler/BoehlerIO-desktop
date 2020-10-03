@@ -1,0 +1,42 @@
+
+
+// Utitlities
+
+@import "../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Page - Setting - Typography -------------------- //
+
+.setting {
+
+    // Setting Form
+
+    .setting-form {
+        .form {
+            .btn-form {
+                @include display-inline-block;
+
+                @include width-auto;
+
+                @include px-5;
+
+                @include font-primary-bold;
+                @include p;
+
+                color               : $c-white;
+
+                background-color    : $c-primary-normal;
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+
+            .form {
+                .btn-form {
+                    @include display-block;
+
+                    @include width-100;
+                }
+            }
+        }
+    }
+}

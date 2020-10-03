@@ -1,0 +1,71 @@
+
+
+// Utitlities
+
+@import "../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Page - Home - Typography -------------------- //
+
+.home {
+
+    // Information
+
+    .information {
+        .info-text {
+            .title {
+                h1 {
+                    @include font-primary-bold;
+                    @include h5;
+
+                    color        : $c-black;
+                }
+            }
+
+            .desc {
+                p {
+                    @include mb-0;
+
+                    @include font-primary-light;
+                    @include p;
+
+                    color        :  $c-grey;
+                }
+            }
+        }
+
+        .info-date {
+            .title {
+                h3 {
+                    @include font-primary-bold;
+                    @include h5;
+
+                    color        : $c-black;
+                }
+            }
+
+            .time {
+                #date {
+                    @include py-1;
+
+                    @include font-primary-bold;
+                    @include p;
+
+                    @include text-transform-uppercase;
+
+                    color               : $c-primary-normal;
+
+                    background-color    : $c-grey-super-light;
+                }
+
+                #clock {
+                    @include pb-1;
+
+                    @include font-primary-light;
+                    @include p;
+
+                    color        :  $c-grey;
+                }
+            }
+        }
+    }
+}

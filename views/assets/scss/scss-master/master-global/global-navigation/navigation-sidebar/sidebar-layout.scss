@@ -1,0 +1,81 @@
+
+
+// Utitlities
+
+@import "../../../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Navigation - Sidebar - Layout -------------------- //
+
+.sidebar {
+    
+    // Primary
+
+    &.sidebar-primary {
+        background-color        : $c-white;
+
+        // Logo
+
+        .sidebar-logo {
+            @include py-5;
+        }
+
+        // Content
+
+        .sidebar-content {
+            height          : calc(100% - 164px);
+
+            .content-link {
+                .link-item {
+                    @include display-block;
+
+                    .collapses {
+                        @include position-relative;
+
+                        .card {
+                            @include p-0;
+
+                            background-color        : $c-tertiary-normal;
+                            border                  : none;
+                            border-radius           : 0em;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Copyright
+
+        .sidebar-copyright {
+            @include text-align-center;
+
+            @include py-2;
+
+            background-color            : $c-primary-normal;
+        }
+
+        @include media-breakpoint-down(md) {
+
+            // Logo
+
+            .sidebar-logo {
+                @include pt-5;
+                @include pb-4;
+            }
+
+            // Content
+
+            .sidebar-content {
+                height          : calc(100% - 132px);
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+
+            // Content
+
+            .sidebar-content {
+                height          : calc(100% - 140px);
+            }
+        }
+    }
+}

@@ -1,0 +1,122 @@
+
+
+// Utitlities
+
+@import "../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Master - Form -------------------- //
+
+// Form - Select
+
+.form-select {
+
+    // Primary
+
+    &.select-primary {
+        @include mb-3;
+
+        label {
+            @include mb-1;
+
+            @include font-primary-light;
+            @include small;
+
+            @include text-transform-uppercase;
+
+            color       : $c-grey-light;
+        }
+
+        .form-control {
+            @include height-auto;
+
+            @include py-2;
+            @include px-3;
+
+            @include font-primary-light;
+            @include p;
+
+            color       : $c-grey;
+
+            border      : 1px solid $c-grey-light;
+
+            option {
+                &:disabled {
+                    @include display-none;
+                }
+            }
+        }
+    }
+}
+
+// Form - Input
+
+.form-input {
+
+    // Primary
+
+    &.input-primary {
+        @include mb-3;
+
+        label {
+            @include mb-1;
+
+            @include font-primary-light;
+            @include small;
+
+            @include text-transform-uppercase;
+
+            color       : $c-grey-light;
+        }
+
+        .form-control {
+            @include height-auto;
+
+            @include py-2;
+            @include px-3;
+
+            @include font-primary-light;
+            @include p;
+
+            color       : $c-grey;
+
+            border      : 1px solid $c-grey-light;
+
+            option {
+                &:disabled {
+                    @include display-none;
+                }
+            }
+        }
+    }
+}
+
+// Form - Check
+
+.form-check {
+
+    // Primary
+
+    &.check-primary {
+        @include mb-3;
+
+        padding                 : 1rem 3.5rem;
+
+        background-color        : $c-grey-super-light;
+
+        border-radius           : 0.5em;
+
+        label {
+            @include ml-2;
+
+            @include font-primary-light;
+            @include small;
+
+            color               : $c-grey-dark;
+        }
+
+        @include media-breakpoint-down(sm) {
+
+            padding                 : 1rem 2.5rem;
+        }
+    }
+}

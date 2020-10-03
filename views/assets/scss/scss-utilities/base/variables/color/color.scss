@@ -1,0 +1,99 @@
+
+
+// -------------------- Color Variable -------------------- //
+
+// ---------- Color Theme
+
+$c-primary              : #2a62ff;
+$c-secondary            : #061238;
+$c-tertiary             : #5E81F4;
+$c-quarter              : #8dabff;
+$c-quinary              : #EFF3FE;
+
+// ---------- Color Base
+
+$c-black                : #47464b;
+
+$c-grey-super-light     : #f0f5f9;
+$c-grey-light           : #aeaeae;
+$c-grey                 : #898792;
+$c-grey-dark            : #474747;
+
+$c-white                : #ffffff;
+
+$c-green-super-light    : #e6fff1;
+$c-green                : #51F396;
+
+$c-orange-super-light   : #fff4eb;
+$c-orange               : #ffb273;
+$c-orange-dark          : #FF7200;
+
+$c-red-super-light      : #fff7f6;
+$c-red-light            : #fe9890;
+$c-red                  : #f14747;
+
+// -------------------- Color Palette -------------------- //
+
+$color-theme: (
+     primary: (
+        'normal'        : $c-primary,
+        'darken'        : darken($c-primary, 10%),
+        'lighten'       : lighten($c-primary, 10%),
+     ),
+
+     secondary: (
+        'normal'        : $c-secondary,
+        'darken'        : darken($c-secondary, 10%),
+        'lighten'       : lighten($c-secondary, 10%),
+     ),
+
+     tertiary: (
+        'normal'        : $c-tertiary,
+        'darken'        : darken($c-tertiary, 10%),
+        'lighten'       : lighten($c-tertiary, 10%),
+     ),
+
+     quarter: (
+        'normal'        : $c-quarter,
+        'darken'        : darken($c-quarter, 10%),
+        'lighten'       : lighten($c-quarter, 10%),
+     ),
+
+     quinary: (
+        'normal'        : $c-quinary,
+        'darken'        : darken($c-quinary, 10%),
+        'lighten'       : lighten($c-quinary, 10%),
+     ),
+);
+
+// -------------------- Color Template -------------------- //
+
+// ----- Primary
+
+$c-primary-normal              : map-deep-get($color-theme, primary, 'normal');
+$c-primary-darken              : map-deep-get($color-theme, primary, 'darken');
+$c-primary-lighten             : map-deep-get($color-theme, primary, 'lighten');
+
+// ----- Secondary
+
+$c-secondary-normal            : map-deep-get($color-theme, secondary, 'normal');
+$c-secondary-darken            : map-deep-get($color-theme, secondary, 'darken');
+$c-secondary-lighten           : map-deep-get($color-theme, secondary, 'lighten');
+
+// ----- Tertiary
+
+$c-tertiary-normal             : map-deep-get($color-theme, tertiary, 'normal');
+$c-tertiary-darken             : map-deep-get($color-theme, tertiary, 'darken');
+$c-tertiary-lighten            : map-deep-get($color-theme, tertiary, 'lighten');
+
+// ----- Quarter
+
+$c-quarter-normal              : map-deep-get($color-theme, quarter, 'normal');
+$c-quarter-darken              : map-deep-get($color-theme, quarter, 'darken');
+$c-quarter-lighten             : map-deep-get($color-theme, quarter, 'lighten');
+
+// ----- Quinary
+
+$c-quinary-normal              : map-deep-get($color-theme, quinary, 'normal');
+$c-quinary-darken              : map-deep-get($color-theme, quinary, 'darken');
+$c-quinary-lighten             : map-deep-get($color-theme, quinary, 'lighten');

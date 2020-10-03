@@ -1,0 +1,203 @@
+
+
+// Utitlities
+
+@import "../../Scss-Utilities/Utilities.scss";
+
+// -------------------- Master - Desktop - General -------------------- //
+
+// Html
+
+html {
+    scroll-behavior: smooth;
+}
+
+// Body
+
+body {
+    @include overflow-hidden;
+
+    @include mx-auto;
+
+    max-width           : 1366px;
+
+    font-family         : 'Poppins';
+
+    color               : $c-black;
+
+    // Wrapper
+
+    .wrapper {
+        @include position-relative;
+
+        // Sidebar
+
+        .sidebar {
+
+            // Primary
+
+            &.sidebar-primary {
+                @include position-absolute;
+
+                @include height-100;
+
+                z-index         : 1040;
+
+                width           : 20%;
+
+                left            : 0;
+
+                transition      : 0.5s ease;
+            }
+        }
+
+        // Page
+
+        .page {
+            @include overflow-x-hidden;
+
+            @include height-100;
+
+            margin-left         : 20%;
+
+            background-color    : $c-grey-super-light;
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+
+        // Wrapper
+
+        .wrapper {
+
+            // Sidebar
+
+            .sidebar {
+
+                // Primary
+
+                &.sidebar-primary {
+                    width           : 25%;
+                }
+            }
+
+            // Page
+
+            .page {
+                margin-left         : 25%;
+            }
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+
+        // Wrapper
+
+        .wrapper {
+
+            // Sidebar
+
+            .sidebar {
+
+                // Primary
+
+                &.sidebar-primary {
+                    width           : 75%;
+
+                    transform       : translateX(-100%);
+                }
+
+                &.sidebar-open {
+                    transform       : translateX(0%);
+
+                    transition      : 0.5s ease;
+                }
+            }
+
+            // Page
+
+            .page {
+                margin-left         : 0%;
+            }
+        }
+    }
+}
+
+// Overlay
+
+.sidebar-overlay {
+
+    @include media-breakpoint-down(md) {
+
+        @include position-absolute;
+
+        @include width-100;
+        @include height-100;
+
+        visibility                  : hidden;
+
+        z-index                     : 1030;
+
+        top                         : 0;
+        left                        : 0;
+        bottom                      : 0;
+        right                       : 0;
+
+        transition                  : 0.5s ease;
+
+        &.active {
+            visibility              : visible;
+
+            background-color        : rgba(0, 0, 0, 0.25);
+
+            transition              : 0.5s ease;
+        }
+    }
+}
+
+// Grid
+
+.container {
+    padding-top         : 3.5rem;
+    padding-bottom      : 3.5rem;
+}
+
+.container-fluid {
+    padding-top         : 3.5rem;
+    padding-bottom      : 3.5rem;
+}
+
+.row-responsive {
+    @include media-breakpoint-down(md) {
+        @include display-webkit-box;
+
+        @include overflow-y-hidden;
+        @include overflow-x-auto;
+
+        flex-wrap       : nowrap;
+    }
+}
+
+// Image
+
+img {
+    width               : 100%;
+}
+
+// Anchor
+
+a {
+    transition          : all 0.5s ease;
+
+    i {
+        transition      : all 0.25s ease;
+    }
+
+    &:hover &:focus, &:active {
+        transition      : all 0.5s ease;
+
+        i {
+            transition  : all 0.25s ease;
+        }
+    }
+}

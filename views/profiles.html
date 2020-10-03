@@ -1,0 +1,242 @@
+﻿<!--<!DOCTYPE html>-->
+
+<html>
+<head>
+
+    <!-- Title -->
+
+    <title>
+        BoehlerIO - Profile
+    </title>
+
+    <!-- Meta -->
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!------- Font ------->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!------- CSS ------->
+
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/vendor/slick/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick/slick.css">
+
+    <link rel="stylesheet" href="assets/css/Css-Master.min.css">
+</head>
+
+<!-- Desktop -->
+
+<body onload="startTime()">
+
+    <!--Wrapper - Outer-->
+
+    <div class="wrapper outer">
+
+        <!--Sidebar-->
+
+        <div class="sidebar sidebar-primary">
+            <div class="sidebar-logo">
+                <div class="logo">
+                    <a class="sidebar-brand" href="/">
+                        <span></span> Boehler IO
+                    </a>
+                </div>
+            </div>
+            <div class="sidebar-content">
+                <div class="content-link">
+                    <div class="link-item">
+                        <a class="side-link primary" href="/">
+                            <span class="side-for-icon">
+                                <i class="fas fa-home"></i>
+                            </span>
+                            <span class="side-for-text">
+                                Home
+                            </span>
+                        </a>
+                    </div>
+                    <div class="link-item">
+                        <a class="side-link primary" href="/settings">
+                            <span class="side-for-icon">
+                                <i class="fas fa-cog"></i>
+                            </span>
+                            <span class="side-for-text">
+                                Settings
+                            </span>
+                        </a>
+                    </div>
+                    <div class="link-item">
+                        <a class="side-link primary active" href="/profiles">
+                            <span class="side-for-icon">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span class="side-for-text">
+                                Profiles
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-copyright">
+                <div class="copyright-text">
+                    <div class="desc">
+                        <p>
+                            © Copyright 2020
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Overlay-->
+
+        <div class="sidebar-overlay"></div>
+
+        <!--Page-->
+
+        <div class="page">
+
+            <!--Navbar-->
+
+            <nav class="navbar navbar-primary sticky-top">
+                <div class="container">
+                    <a class="nav-toggle" href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </div>
+            </nav>
+
+            <!--Profile-->
+
+            <div class="profile">
+
+                <!--Information-->
+
+                <div class="section information">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-outer col-12 col-md-12 col-lg-9">
+                                <div class="info-text">
+                                    <div class="title">
+                                        <h1>
+                                            Profiles
+                                        </h1>
+                                    </div>
+                                    <div class="desc">
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-outer col-12 col-md-12 col-lg-3">
+                                <div class="info-date" id="clockdate">
+                                    <div class="title">
+                                        <h3>
+                                            Time
+                                        </h3>
+                                    </div>
+                                    <div class="time">
+                                        <div id="date"></div>
+                                        <div id="clock"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Profile Form-->
+
+                <div class="section profile-form">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-outer col-12 col-md-12 col-lg-12">
+                                <div class="form">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-inner col-12 col-md-12 col-lg-5">
+                                                <div class="form-text">
+                                                    <div class="title">
+                                                        <h3>
+                                                            Form Profiles
+                                                        </h3>
+                                                    </div>
+                                                    <div class="desc">
+                                                        <p>
+                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-inner col-12 col-md-12 col-lg-7">
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-select select-primary">
+                                                            <label>
+                                                                Example select
+                                                            </label>
+                                                            <select class="form-control" id="exampleFormControlSelect1">
+                                                                <option disabled selected>
+                                                                    Select here
+                                                                </option>
+                                                                <option>
+                                                                    Option 1
+                                                                </option>
+                                                                <option>
+                                                                    Option 2
+                                                                </option>
+                                                                <option>
+                                                                    Option 3
+                                                                </option>
+                                                                <option>
+                                                                    Option 4
+                                                                </option>
+                                                                <option>
+                                                                    Option 5
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Example Input
+                                                            </label>
+                                                            <input type="text" class="form-control" id="example-input" placeholder="Placeholder" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <button type="submit" class="btn btn-block btn-form">
+                                                            Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!------- Script ------->
+
+    <script src="assets/javascript/jquery.min.js"></script>
+
+    <script src="assets/javascript/vendor-javascript.js"></script>
+    <script src="assets/javascript/bootstrap/bootstrap.min.js"></script>
+    <script src="assets/javascript/custom-javascript.js"></script>
+</body>
+</html>
