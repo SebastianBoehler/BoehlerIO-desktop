@@ -28,6 +28,8 @@
     <link rel="stylesheet" href="assets/css/vendor/slick/slick.css">
 
     <link rel="stylesheet" href="assets/css/Css-Master.min.css">
+
+    <script src="./assets/javascript/profiles.js"></script>
 </head>
 
 <!-- Desktop -->
@@ -177,38 +179,173 @@
                                             <div class="col-inner col-12 col-md-12 col-lg-7">
                                                 <div class="row">
                                                     <div class="col-12 col-md">
-                                                        <div class="form-select select-primary">
+                                                        <div class="form-input input-primary">
                                                             <label>
-                                                                Example select
+                                                                Profile Name
                                                             </label>
-                                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                                <option disabled selected>
-                                                                    Select here
-                                                                </option>
-                                                                <option>
-                                                                    Option 1
-                                                                </option>
-                                                                <option>
-                                                                    Option 2
-                                                                </option>
-                                                                <option>
-                                                                    Option 3
-                                                                </option>
-                                                                <option>
-                                                                    Option 4
-                                                                </option>
-                                                                <option>
-                                                                    Option 5
-                                                                </option>
-                                                            </select>
+                                                            <input type="text" class="form-control" id="profileName" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md">
                                                         <div class="form-input input-primary">
                                                             <label>
-                                                                Example Input
+                                                                First and last name
                                                             </label>
-                                                            <input type="text" class="form-control" id="example-input" placeholder="Placeholder" />
+                                                            <input type="text" class="form-control" id="name" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Email
+                                                            </label>
+                                                            <input type="email" class="form-control" id="email" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Phone Number
+                                                            </label>
+                                                            <input type="text" class="form-control" id="phone" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Address 1
+                                                            </label>
+                                                            <input type="email" class="form-control" id="address" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Address 2
+                                                            </label>
+                                                            <input type="text" class="form-control" id="address2" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Address 3
+                                                            </label>
+                                                            <input type="email" class="form-control" id="address3" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Unit / Apt
+                                                            </label>
+                                                            <input type="text" class="form-control" id="unit" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-select select-primary">
+                                                            <label>
+                                                                Country
+                                                            </label>
+                                                            <select class="form-control" id="country">
+                                                                <option disabled selected>
+                                                                    Please select
+                                                                </option>
+                                                                <option>
+                                                                    DE
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-select select-primary">
+                                                            <label>
+                                                                State
+                                                            </label>
+                                                            <select class="form-control" id="state">
+                                                                <option disabled selected>
+                                                                    Please select
+                                                                </option>
+                                                                <option>
+                                                                    NY
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                City
+                                                            </label>
+                                                            <input type="email" class="form-control" id="city" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                ZIP
+                                                            </label>
+                                                            <input type="text" class="form-control" id="zip" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                Credit Card Number
+                                                            </label>
+                                                            <input type="email" class="form-control" id="credit_card[number]" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
+                                                                CVV
+                                                            </label>
+                                                            <input type="text" class="form-control" id="credit_card[cvv]" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-select select-primary">
+                                                            <label>
+                                                                Expiration Month
+                                                            </label>
+                                                            <select class="form-control" id="credit_card[month]">
+                                                                <option disabled selected>
+                                                                    Please select
+                                                                </option>
+                                                                <option>
+                                                                    09
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-select select-primary">
+                                                            <label>
+                                                                Expiration Year
+                                                            </label>
+                                                            <select class="form-control" id="credit_card[year]">
+                                                                <option disabled selected>
+                                                                    Please select
+                                                                </option>
+                                                                <option>
+                                                                    2021
+                                                                </option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>

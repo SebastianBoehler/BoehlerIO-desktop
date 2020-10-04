@@ -22,3 +22,7 @@ app.on('ready', () => {
         evt.preventDefault();
       });
 })
+
+ipcMain.on('test', async (event, data) => {
+    console.log(data)
+})

@@ -17,6 +17,10 @@ app.get('/profiles', function (req, res) {
     res.sendFile(__dirname + '/views/profiles.html');
 })
 
+app.get('/task', function (req, res) {
+    res.sendFile(__dirname + '/views/task.html');
+})
+
 app.get('*', function (req, res) {
     res.sendFile(__dirname + '/views/home.html');
 })
