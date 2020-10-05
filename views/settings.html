@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="assets/css/Css-Master.min.css">
 
     <script src="./assets/javascript/settings.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <!-- Desktop -->
@@ -161,7 +162,7 @@
                             <div class="col-outer col-12 col-md-12 col-lg-12">
                                 <div class="form">
                                     <form>
-                                        <div class="row">
+                                        <div class="row" style="display: none;">
                                             <div class="col-inner col-12 col-md-12 col-lg-5">
                                                 <div class="form-text">
                                                     <div class="title">
@@ -183,7 +184,7 @@
                                                             <label>
                                                                 Checkout Delay (ms)
                                                             </label>
-                                                            <input type="number" class="form-control" id="CheckoutDelay" placeholder="1500ms" step="100" />
+                                                            <input type="number" class="form-control" id="checkoutDelay" value="2500" step="100" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -199,7 +200,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" style="display: none;">
                                             <div class="col-inner col-12 col-md-12 col-lg-5">
                                                 <div class="form-text">
                                                     <div class="title">
@@ -248,16 +249,16 @@
                                                             <label>
                                                                 Add to cart delay (ms)
                                                             </label>
-                                                            <input type="number" class="form-control" id="atcDelay" placeholder="500ms" step="100"/>
+                                                            <input type="number" class="form-control" id="atcDelay" value="500" step="100"/>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-check check-primary">
-                                                            <input type="checkbox" class="form-check-input">
+                                                            <input type="checkbox" class="form-check-input" id="highestQuantity">
                                                             <label class="form-check-label">
-                                                                Always cart highest available quantity
+                                                                Always cart as many as possible
                                                             </label>
                                                         </div>
                                                     </div>
@@ -284,6 +285,26 @@
                                                     <div class="col-12 col-md">
                                                         <div class="form-input input-primary">
                                                             <label>
+                                                                site region
+                                                            </label>
+                                                            <select class="form-control" id="region">
+                                                                <option value="eu" selected>
+                                                                    EU
+                                                                </option>
+                                                                <option value="us">
+                                                                    US
+                                                                </option>
+                                                                <option value="jpn">
+                                                                    JPN
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 col-md">
+                                                        <div class="form-input input-primary">
+                                                            <label>
                                                                 discord Webhook
                                                             </label>
                                                             <input type="text" class="form-control" id="discordWebhook"/>
@@ -293,7 +314,7 @@
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-check check-primary">
-                                                            <input type="checkbox" class="form-check-input">
+                                                            <input type="checkbox" class="form-check-input" id="discordNotifications">
                                                             <label class="form-check-label">
                                                                 Enable discord notifications
                                                             </label>
@@ -302,7 +323,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="submit" class="btn btn-block btn-form">
+                                                        <button type="submit" class="btn btn-block btn-form" onclick="saveSettings()">
                                                             Save
                                                         </button>
                                                     </div>

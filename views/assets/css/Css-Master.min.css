@@ -31,6 +31,19 @@
     display: none;
 }
 
+.stopped {
+    border-color: #a8a8a8
+}
+.success {
+    border-color: #51f396
+}
+.failed {
+    border-color: red
+}
+.idle {
+    border-color: yellow
+}
+
 .icon-bbm:before {
     content: '';
 }
@@ -232,7 +245,7 @@ a:active i {
     width: 1.75rem;
     height: 1.75rem;
     background-color: #fff;
-    border: .25rem solid #51f396;
+    border: .25rem solid #ededed;
     border-radius: 100%;
 }
 
@@ -342,7 +355,7 @@ a:active i {
     .table.table-theme-primary tbody td span.indicator {
         width: 1.4rem;
         height: 1.4rem;
-        border: .2rem solid #51f396;
+        border: .2rem solid #ededed;
     }
 
     .table.table-theme-primary tbody td a.btn-color {

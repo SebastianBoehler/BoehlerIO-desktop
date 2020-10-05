@@ -1,0 +1,30 @@
+const {
+    ipcRenderer
+} = require('electron')
+const {
+    sleep
+} = require('./fileUtils');
+
+window.addEventListener("load", async () => {
+    window.saveTask = async () => {
+        const keywords = $('#keywords').val()
+        const mode = $('#mode').val()
+        const size = $('#size').val()
+        const color = $('#color').val()
+        const checkoutDelay = $('#checkoutDelay').val()
+        const category = $('#category').val()
+        const taskAmount = Number($('#taskAmount').val())
+        const profile = $('#profile').val()
+
+        ipcRenderer.send('saveTask', {
+            keywords: keywords,
+            mode: mode,
+            size: size,
+            color: color,
+            checkoutDelay: checkoutDelay,
+            category: category,
+            taskAmount: taskAmount,
+            profile: profile
+        })
+    }
+})

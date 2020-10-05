@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="assets/css/Css-Master.min.css">
 
     <script src="./assets/javascript/profiles.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <!-- Desktop -->
@@ -166,7 +167,7 @@
                                                 <div class="form-text">
                                                     <div class="title">
                                                         <h3>
-                                                            Form Profiles
+                                                            Billing Profile
                                                         </h3>
                                                     </div>
                                                     <div class="desc">
@@ -219,7 +220,7 @@
                                                             <label>
                                                                 Address 1
                                                             </label>
-                                                            <input type="email" class="form-control" id="address" />
+                                                            <input type="text" class="form-control" id="address" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md">
@@ -237,7 +238,7 @@
                                                             <label>
                                                                 Address 3
                                                             </label>
-                                                            <input type="email" class="form-control" id="address3" />
+                                                            <input type="text" class="form-control" id="address3" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md">
@@ -255,14 +256,45 @@
                                                             <label>
                                                                 Country
                                                             </label>
-                                                            <select class="form-control" id="country">
-                                                                <option disabled selected>
-                                                                    Please select
-                                                                </option>
-                                                                <option>
-                                                                    DE
-                                                                </option>
-                                                            </select>
+                                                            <select id="country" class="form-control">
+                                                                <option value="USA">US</option>
+                                                                <option value="CANADA">CA</option>
+                                                                <option value="MEXICO">MX</option>
+                                                                <option value="GB">UK</option>
+                                                                <option value="NB">UK (N. IRELAND)</option>
+                                                                <option>AT</option>
+                                                                <option>BY</option>
+                                                                <option>BE</option>
+                                                                <option>BG</option>
+                                                                <option>HR</option>
+                                                                <option>CZ</option>
+                                                                <option>DK</option>
+                                                                <option>EE</option>
+                                                                <option>FI</option>
+                                                                <option>FR</option>
+                                                                <option selected>DE</option>
+                                                                <option>GR</option>
+                                                                <option>HU</option>
+                                                                <option>IS</option>
+                                                                <option>IE</option>
+                                                                <option>IT</option>
+                                                                <option>LV</option>
+                                                                <option>LT</option>
+                                                                <option>LU</option>
+                                                                <option>MC</option>
+                                                                <option>NL</option>
+                                                                <option>NO</option>
+                                                                <option>PL</option>
+                                                                <option>PT</option>
+                                                                <option>RO</option>
+                                                                <option>RU</option>
+                                                                <option>SK</option>
+                                                                <option>SI</option>
+                                                                <option>ES</option>
+                                                                <option>SE</option>
+                                                                <option>CH</option>
+                                                                <option>TR</option>
+                                                              </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md">
@@ -270,14 +302,114 @@
                                                             <label>
                                                                 State
                                                             </label>
-                                                            <select class="form-control" id="state">
-                                                                <option disabled selected>
-                                                                    Please select
-                                                                </option>
-                                                                <option>
-                                                                    NY
-                                                                </option>
-                                                            </select>
+                                                            <select id="state" class="form-control">
+                                                                <option value="AL">AL</option>
+                                                                <option value="AK">AK</option>
+                                                                <option value="AS">AS</option>
+                                                                <option value="AZ">AZ</option>
+                                                                <option value="AR">AR</option>
+                                                                <option value="CA">CA</option>
+                                                                <option value="CO">CO</option>
+                                                                <option value="CT">CT</option>
+                                                                <option value="DE">DE</option>
+                                                                <option value="DC">DC</option>
+                                                                <option value="FM">FM</option>
+                                                                <option value="FL">FL</option>
+                                                                <option value="GA">GA</option>
+                                                                <option value="GU">GU</option>
+                                                                <option value="HI">HI</option>
+                                                                <option value="ID">ID</option>
+                                                                <option value="IL">IL</option>
+                                                                <option value="IN">IN</option>
+                                                                <option value="IA">IA</option>
+                                                                <option value="KS">KS</option>
+                                                                <option value="KY">KY</option>
+                                                                <option value="LA">LA</option>
+                                                                <option value="ME">ME</option>
+                                                                <option value="MH">MH</option>
+                                                                <option value="MD">MD</option>
+                                                                <option value="MA">MA</option>
+                                                                <option value="MI">MI</option>
+                                                                <option value="MN">MN</option>
+                                                                <option value="MS">MS</option>
+                                                                <option value="MO">MO</option>
+                                                                <option value="MT">MT</option>
+                                                                <option value="NE">NE</option>
+                                                                <option value="NV">NV</option>
+                                                                <option value="NH">NH</option>
+                                                                <option value="NJ">NJ</option>
+                                                                <option value="NM">NM</option>
+                                                                <option value="NY">NY</option>
+                                                                <option value="NC">NC</option>
+                                                                <option value="ND">ND</option>
+                                                                <option value="MP">MP</option>
+                                                                <option value="OH">OH</option>
+                                                                <option value="OK">OK</option>
+                                                                <option value="OR">OR</option>
+                                                                <option value="PW">PW</option>
+                                                                <option value="PA">PA</option>
+                                                                <option value="PR">PR</option>
+                                                                <option value="RI">RI</option>
+                                                                <option value="SC">SC</option>
+                                                                <option value="SD">SD</option>
+                                                                <option value="TN">TN</option>
+                                                                <option value="TX">TX</option>
+                                                                <option value="UT">UT</option>
+                                                                <option value="VT">VT</option>
+                                                                <option value="VI">VI</option>
+                                                                <option value="VA">VA</option>
+                                                                <option value="WA">WA</option>
+                                                                <option value="WV">WV</option>
+                                                                <option value="WI">WI</option>
+                                                                <option value="WY">WY</option>
+                                                                <option disabled>--- CANADA ---</option>
+                                                                <option value="AB">AB</option>
+                                                                <option value="BC">BC</option>
+                                                                <option value="MB">MB</option>
+                                                                <option value="NB">NB</option>
+                                                                <option value="NL">NL</option>
+                                                                <option value="NT">NT</option>
+                                                                <option value="NS">NS</option>
+                                                                <option value="NU">NU</option>
+                                                                <option value="ON">ON</option>
+                                                                <option value="PE">PE</option>
+                                                                <option value="QC">QC</option>
+                                                                <option value="SK">SK</option>
+                                                                <option value="YT">YT</option>
+                                                                <option disabled>--- MEXICO ---</option>
+                                                                <option value="AGU">AGU</option>
+                                                                <option value="BCN">BCN</option>
+                                                                <option value="BCS">BCS</option>
+                                                                <option value="CAM">CAM</option>
+                                                                <option value="CHP">CHP</option>
+                                                                <option value="CHH">CHH</option>
+                                                                <option value="COA">COA</option>
+                                                                <option value="COL">COL</option>
+                                                                <option value="DUR">DUR</option>
+                                                                <option value="GUA">GUA</option>
+                                                                <option value="GRO">GRO</option>
+                                                                <option value="HID">HID</option>
+                                                                <option value="JAL">JAL</option>
+                                                                <option value="MEX">MEX</option>
+                                                                <option value="CMX">CMX</option>
+                                                                <option value="MIC">MIC</option>
+                                                                <option value="MOR">MOR</option>
+                                                                <option value="NAY">NAY</option>
+                                                                <option value="NLE">NLE</option>
+                                                                <option value="OAX">OAX</option>
+                                                                <option value="PUE">PUE</option>
+                                                                <option value="QUE">QUE</option>
+                                                                <option value="ROO">ROO</option>
+                                                                <option value="SLP">SLP</option>
+                                                                <option value="SIN">SIN</option>
+                                                                <option value="SON">SON</option>
+                                                                <option value="TAB">TAB</option>
+                                                                <option value="TAM">TAM</option>
+                                                                <option value="TLA">TLA</option>
+                                                                <option value="VER">VER</option>
+                                                                <option value="YUC">YUC</option>
+                                                                <option value="ZAC">ZAC</option>
+                                                              </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -287,7 +419,7 @@
                                                             <label>
                                                                 City
                                                             </label>
-                                                            <input type="email" class="form-control" id="city" />
+                                                            <input type="text" class="form-control" id="city" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md">
@@ -305,7 +437,7 @@
                                                             <label>
                                                                 Credit Card Number
                                                             </label>
-                                                            <input type="email" class="form-control" id="credit_card[number]" />
+                                                            <input type="text" class="form-control" id="credit_card[number]" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-md">
@@ -351,7 +483,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="submit" class="btn btn-block btn-form">
+                                                        <button type="submit" class="btn btn-block btn-form" onclick="saveProfile()">
                                                             Save
                                                         </button>
                                                     </div>

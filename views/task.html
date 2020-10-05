@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="assets/css/Css-Master.min.css">
 
     <script src="./assets/javascript/task.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <!-- Desktop -->
@@ -183,7 +184,7 @@
                                                             <label>
                                                                 Keywords
                                                             </label>
-                                                            <input type="text" class="form-control" id="Keywords"/>
+                                                            <input type="text" class="form-control" id="keywords"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -193,14 +194,14 @@
                                                             <label>
                                                                 Task mode
                                                             </label>
-                                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                                <option disabled selected>
+                                                            <select class="form-control" id="mode" disabled>
+                                                                <option disabled>
                                                                     Please select
                                                                 </option>
-                                                                <option>
+                                                                <option value="browser" selected>
                                                                     Browser
                                                                 </option>
-                                                                <option>
+                                                                <option value="hybrid">
                                                                     Hybrid
                                                                 </option>
                                                             </select>
@@ -239,15 +240,45 @@
                                                             <label>
                                                                 Category
                                                             </label>
-                                                            <select class="form-control" id="exampleFormControlSelect1">
+                                                            <select class="form-control" id="category">
                                                                 <option disabled selected>
                                                                     Please select
+                                                                </option>
+                                                                <option>
+                                                                    Skate
                                                                 </option>
                                                                 <option>
                                                                     Accessories
                                                                 </option>
                                                                 <option>
+                                                                    Bags
+                                                                </option>
+                                                                <option>
+                                                                    Jackets
+                                                                </option>
+                                                                <option>
+                                                                    Pants
+                                                                </option>
+                                                                <option>
+                                                                    Sweatshirts
+                                                                </option>
+                                                                <option>
+                                                                    Shirts
+                                                                </option>
+                                                                <option>
+                                                                    Tops/Sweaters
+                                                                </option>
+                                                                <option>
                                                                     Hats
+                                                                </option>
+                                                                <option>
+                                                                    Shoes
+                                                                </option>
+                                                                <option>
+                                                                    T-Shirts
+                                                                </option>
+                                                                <option value="new">
+                                                                    New
                                                                 </option>
                                                             </select>
                                                         </div>
@@ -257,7 +288,7 @@
                                                             <label>
                                                                 Amount of tasks
                                                             </label>
-                                                            <input type="number" class="form-control" id="taskAmount" step="1" value="0"/>
+                                                            <input type="number" class="form-control" id="taskAmount" step="1" value="1" min="1" disabled/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -267,9 +298,9 @@
                                                             <label>
                                                                 Profile
                                                             </label>
-                                                            <select class="form-control" id="profile">
-                                                                <option disabled selected>
-                                                                    Please select
+                                                            <select class="form-control" id="profile" disabled>
+                                                                <option disabled selected value="personal">
+                                                                    Personal
                                                                 </option>
                                                                 <option>
                                                                     DEMO
@@ -280,7 +311,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="submit" class="btn btn-block btn-form">
+                                                        <button type="submit" class="btn btn-block btn-form" onclick="saveTask()">
                                                             Save
                                                         </button>
                                                     </div>
