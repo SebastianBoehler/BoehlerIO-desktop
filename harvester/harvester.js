@@ -9,13 +9,10 @@ window.addEventListener("load", async (e) => {
   if (location.href.includes('chrome-error')) {
     setTimeout(() => {
       location.href = 'https://supremenewyork.com/index'
-      ipcRenderer.send('captcha-error')
+      ipcRenderer.send('captcha-error', 'chrome-error')
     }, 500);
   }
   else if (location.host.includes('supremenewyork')) {
-    setTimeout(() => {
-      ipcRenderer.send('harvesterIsReady')
-    }, 100);
     //alert('on supreme site')
     $("body").html("")
     $("body").css('background-color', '#f0f5f9')
@@ -44,19 +41,21 @@ window.addEventListener("load", async (e) => {
       "z-index": 99,
     })
 
+    ipcRenderer.send('harvesterIsReady')
+
     window.callback = async (token) => {
       ipcRenderer.send('captcha-done', token)
       CaptchaHasBeenTriggered = false
-      //ipcRenderer.send('TriggeredCheck', CaptchaHasBeenTriggered)
+      ipcRenderer.send('TriggeredCheck', CaptchaHasBeenTriggered)
       //check captcha score
       location.reload()
     }
 
     window.captchaError = async (error) => {
-      ipcRenderer.send('captcha-error')
+      ipcRenderer.send('captcha-error', error)
       console.log(error)
       CaptchaHasBeenTriggered = false
-      //ipcRenderer.send('TriggeredCheck', CaptchaHasBeenTriggered)
+      ipcRenderer.send('TriggeredCheck', CaptchaHasBeenTriggered)
       location.reload()
     }
 

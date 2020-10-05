@@ -1,5 +1,9 @@
-const { ipcRenderer } = require('electron')
-const { stat } = require('fs')
+const {
+    ipcRenderer
+} = require('electron')
+const {
+    stat
+} = require('fs')
 
 ipcRenderer.send('test', {
     action: document.location.href
@@ -17,9 +21,13 @@ window.addEventListener("load", async () => {
             if (!color || color.length <= 1) color = 'ANY'
             var profile = data[a]['profile']
             if (!profile) profile = 'personal'
+
+            var circleStyle = '#ededed'
+            if (status === 'paypal' || status === 'paid') circleStyle = '#51f396'
+            else if (status !== 'stopped') circleStyle = '#ffb273'
             $('#taskTable').append(`<tr id="${data[a]['id']}">
             <td>
-                <span class="indicator" id="${data[a]['id']}-circle">
+                <span class="indicator" id="${data[a]['id']}-circle" style="border-color: ${circleStyle}">
                     
                 </span>
             </td>
@@ -55,8 +63,6 @@ window.addEventListener("load", async () => {
                 </a>
             </td>
         </tr>`)
-
-            //if (status === 'paypal' || status === 'paid') $(`#${id}-circle`).css('border-color', '#51f396')
         }
     })
 
@@ -70,6 +76,10 @@ window.addEventListener("load", async () => {
 
     window.stopTask = (id) => {
         ipcRenderer.send('stopTask', id)
+    }
+
+    window.startAll = () => {
+        ipcRenderer.send('startAllTasks')
     }
 
     ipcRenderer.on('statusChange', (event, data, success) => {

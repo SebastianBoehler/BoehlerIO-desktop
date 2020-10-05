@@ -62,7 +62,9 @@ app.on('ready', () => {
             nodeIntegration: true
         },
         height: 800,
+        minHeight: 800,
         width: 1300,
+        minWidth: 1300,
         title: 'BOEHLER IO DESKTOP'
     })
 
@@ -72,7 +74,7 @@ app.on('ready', () => {
         evt.preventDefault();
     });
 
-    mainWindow.on('closed', async () => {
+    mainWindow.on('close', async () => {
         var tasks = await store.get('tasks')
         for (var a in tasks) {
             tasks[a]['status'] = 'stopped'
@@ -120,6 +122,10 @@ ipcMain.on('stopTask', async (event, id) => {
     var tasks = await store.get('tasks')
     const index = tasks.findIndex(item => item['id'] === id)
     var task = tasks[index]
+    if (task['status'] === 'stopped') {
+        console.log('task is already stopped')
+        return
+    }
     task['status'] = 'stopped'
     tasks[index] = task
     store.set('tasks', tasks)
@@ -135,13 +141,30 @@ ipcMain.on('loadSettings', async (event, data) => {
 })
 
 ipcMain.on('startTask', async (event, id) => {
+    var tasks = await store.get('tasks')
+    var data = (tasks.filter(item => item['id'] === id))[0]
+    if (data['status'] !== 'stopped') {
+        console.log('task is already running')
+        return
+    }
     changeTaskStatus(id, 'searching')
-    await sleep(1000)
+    await sleep(250)
     myEmitter.emit('task', id)
 })
 
+ipcMain.on('startAllTasks', async (event) => {
+    const tasks = await store.get('tasks')
+    for (var a in tasks) {
+        changeTaskStatus(tasks[a]['id'], 'searching')
+        await sleep(250)
+        myEmitter.emit('task', tasks[a]['id'])
+        await sleep(50)
+    }
+})
+
 ipcMain.on('harvesterIsReady', async (event, data) => {
-    harvesterIsReady = true
+    harvesterisReady = true
+    console.log('harvesterIsReady', harvesterisReady)
 })
 
 ipcMain.on('captcha-done', async (event, token) => {
@@ -160,16 +183,17 @@ ipcMain.on('captcha-done', async (event, token) => {
 ipcMain.on('captcha-error', async (event, error) => {
     console.log(error)
     isCurrentlySolving = false
-    harvesterisReady = false
+    //harvesterisReady = false
 
-})
-
-ipcMain.on('harvesterIsReady', async (event, data) => {
-    harvesterisReady = true
 })
 
 ipcMain.on('test', (event, data) => {
     console.log(data)
+})
+
+ipcMain.on('TriggeredCheck', (event, data) => {
+    console.log('triggeredCheck', data)
+    if (!data) isCurrentlySolving = false
 })
 async function changeTaskStatus(id, status, success) {
     var tasks = await store.get('tasks')
@@ -211,10 +235,11 @@ function startHarvester() {
         userAgent: 'Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Mobile Safari/537.36'
     })
 
-    harvesterWindow.on("closed", () => (
-        harvesterWindow = undefined,
+    harvesterWindow.on("close", () => {
+        harvesterWindow = undefined
         isCurrentlySolvingCaptcha = false
-    ));
+        harvesterisReady = false
+    });
 }
 
 myEmitter.on('task', async (id) => {
@@ -225,6 +250,7 @@ myEmitter.on('task', async (id) => {
         var tasks = await store.get('tasks')
         var data = (tasks.filter(item => item['id'] === id))[0]
         var success = false
+        var isStatusEndpoint = false
         console.log(id, new Date().getTime())
         if (data['status'] === 'stopped') {
             console.log('stopped')
@@ -268,7 +294,7 @@ myEmitter.on('task', async (id) => {
                 if (data['status'] === 'stopped') {
                     await browser.close()
                     return
-                } else if (!browser) {
+                } else if (!browser || success) {
                     clearInterval(taskStatus)
                     return
                 }
@@ -304,6 +330,7 @@ myEmitter.on('task', async (id) => {
                     interceptedRequest.abort();
                 } else if (requestURL.includes('status.json')) {
                     console.log(requestURL)
+                    isStatusEndpoint = true
                     checkStatus(requestURL)
                     interceptedRequest.continue();
                 } else {
@@ -337,7 +364,7 @@ myEmitter.on('task', async (id) => {
             var cookies = (await page.evaluate(() => document.cookie)).split(';')
 
             var cartValid = false
-            
+
             for (var a in cookies) {
                 const cookie = new Cookie(cookies[a])
                 if (cookie['key'] === 'pure_cart') {
@@ -367,11 +394,12 @@ myEmitter.on('task', async (id) => {
 
             changeTaskStatus(id, 'Fill out data')
 
-            const form = await formParser().catch(e => {console.log(e)})
+            const form = await formParser().catch(e => {
+                console.log(e)
+            })
 
-            console.log('form parser done', typeof form)
-
-            const billingProfile = await getBillingProfile(data['profile'])
+            var billingProfile = await getBillingProfile(data['profile'])
+            if (region === 'us' && billingProfile['type'] !== 'paypal') billingProfile['type'] = 'credit_card'
 
             const dataEU = {
                 'order[billing_name]': 'name',
@@ -409,7 +437,6 @@ myEmitter.on('task', async (id) => {
             }
 
             changeTaskStatus(id, 'captcha required')
-            console.log('captcha required', isCurrentlySolving)
             captchaBank['required']++
             const captchaInterval = setInterval(waitforToken, 200);
 
@@ -465,7 +492,15 @@ myEmitter.on('task', async (id) => {
                 if (!success && page !== undefined) {
                     location = await page.evaluate(() => document.location.href)
                     if (location.includes('checkout.json')) {
+                        changeTaskStatus(id, 'failed', false)
                         await browser.close()
+                        await sleep(500)
+                        myEmitter.emit('task', id)
+                        return
+                    } else if (location.includes('chargeError')) {
+                        changeTaskStatus(id, 'failed', false)
+                        await browser.close()
+                        await sleep(500)
                         myEmitter.emit('task', id)
                         return
                     }
@@ -482,6 +517,7 @@ myEmitter.on('task', async (id) => {
                     })
                 console.log(JSON.stringify(orderData, null, 2))
                 if (orderData['status'] !== 'paid' || orderData['status'] !== 'failed') {
+                    if (orderData['status'] === 'cca') changeTaskStatus(id, '3DS authentication required')
                     await sleep(250)
                     checkStatus(url)
                 } else if (orderData['status'] === 'paid') {

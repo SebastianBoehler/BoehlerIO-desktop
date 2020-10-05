@@ -15,10 +15,10 @@ window.saveProfile = () => {
     const state = $('#state').val()
     const city = $('#city').val()
     const zip = $('#zip').val()
-    const ccnumber = $('#credit_card[number]').val() || ''
-    const cvv = $('#credit_card[cvv]').val()
-    const month = $('#credit_card[month]').val()
-    const year = $('#credit_card[year]').val()
+    const ccnumber = $('#ccnumber').val() || ''
+    const cvv = $('#cvv').val()
+    const month = $('#month').val()
+    const year = $('#year').val()
 
     const cardNumberFirst = ccnumber.charAt(0) || undefined
     var cardType
@@ -77,9 +77,9 @@ window.addEventListener("load", async () => {
         $('#state').val(data['state'])
         $('#city').val(data['city'])
         $('#zip').val(data['zip'])
-        $('#credit_card[number]').val(data['ccnumber'])
-        $('#credit_card[cvv]').val(data['cvv'])
-        $('#credit_card[month]').val(data['month'])
-        $('#credit_card[year]').val(data['year'])
+        $('#ccnumber').val(data['ccnumber'])
+        $('#cvv').val(data['cvv'])
+        $('#month').val(data['month'])
+        $('#year').val(data['year'])
     })
 })
