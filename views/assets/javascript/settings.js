@@ -7,6 +7,7 @@ window.saveSettings = () => {
     const highestQuantity = $('#highestQuantity').is(":checked")
     const discordWebhook = $('#discordWebhook').val()
     const discordNotifications = $('#discordNotifications').is(":checked")
+    const executablePath = $('#executablePath').val()
     const region = $('#region').val()
 
     ipcRenderer.send('saveSettings', {
@@ -16,7 +17,8 @@ window.saveSettings = () => {
         highestQuantity: highestQuantity,
         discordWebhook: discordWebhook,
         discordNotifications: discordNotifications,
-        region: region
+        region: region,
+        executablePath: executablePath
     })
 }
 
@@ -32,5 +34,6 @@ window.addEventListener("load", async () => {
         $('#discordWebhook').val(data['discordWebhook'])
         $('#discordNotifications').prop('checked', data['discordNotifications'])
         $('#region').val(data['region'])
+        $('#executablePath').val(data['executablePath'])
     })
 })

@@ -10,12 +10,17 @@ const {
     sleep,
     getUserAgent,
     findProduct,
-    isStopped
+    isStopped,
+    notify
 } = require('./fileUtils');
 const server = require('./server');
 const Store = require('electron-store');
-const open = require('open')
+const open = require('open');
 const store = new Store();
+
+const log = require('electron-log');
+
+log.catchErrors()
 
 var Cookie = require('request-cookies').Cookie;
 
@@ -38,9 +43,13 @@ var captchaBank = {
     tokens: []
 }
 
+if (process.platform.includes('win')) app.setAppUserModelId(process.execPath)
+
 setInterval(async () => {
     if (harvesterWindow) {
+        //console.log(captchaBank['required'], isCurrentlySolving, harvesterisReady)
         if (captchaBank['required'] > 0 && !isCurrentlySolving && harvesterisReady) {
+            console.log('triggerCaptcha')
             harvesterWindow.webContents.send('triggerCaptcha')
             isCurrentlySolving = true
         }
@@ -62,11 +71,12 @@ app.on('ready', () => {
         minHeight: 800,
         width: 1300,
         minWidth: 1300,
-        title: 'BOEHLER IO DESKTOP'
+        title: 'BOEHLER IO DESKTOP',
+        icon: __dirname + '/images/logo.png'
     })
 
     mainWindow.loadURL('http://localhost:5050/')
-    mainWindow.webContents.openDevTools()
+    //mainWindow.webContents.openDevTools()
     mainWindow.on('page-title-updated', (evt) => {
         evt.preventDefault();
     });
@@ -83,11 +93,13 @@ app.on('ready', () => {
 ipcMain.on('saveSettings', async (event, data) => {
     store.set('settings', data)
     console.log(await store.get('settings'))
+    notify('Saved!', 'Your settings have been saved!')
 })
 
 ipcMain.on('saveProfile', async (event, data) => {
     store.set('profile', data)
     console.log(data)
+    notify('Saved!', 'Your profile has been saved!')
 })
 
 ipcMain.on('loadProfile', async (event, data) => {
@@ -161,6 +173,7 @@ ipcMain.on('startAllTasks', async (event) => {
 
 ipcMain.on('harvesterIsReady', async (event, data) => {
     harvesterisReady = true
+    isCurrentlySolving = false
     console.log('harvesterIsReady', harvesterisReady)
 })
 
@@ -220,7 +233,8 @@ function startHarvester() {
             nodeIntegration: true,
             webSecurity: false
         },
-        title: 'Captcha Harvester'
+        title: 'Captcha Harvester',
+        icon: __dirname + '/images/logo.png'
     });
 
     //harvesterWindow.webContents.openDevTools()
@@ -241,6 +255,7 @@ function startHarvester() {
 
 myEmitter.on('task', async (id) => {
     setImmediate(async () => {
+        log.info(`Starting task ${id}`)
         if (!harvesterWindow) startHarvester()
         const settings = await store.get('settings')
         const region = settings['region']
@@ -250,6 +265,7 @@ myEmitter.on('task', async (id) => {
         var isStatusEndpoint = false
         console.log(id, new Date().getTime())
         if (data['status'] === 'stopped') {
+            log.info(`Stopped task ${id}`)
             console.log('stopped')
             return
         }
@@ -260,6 +276,7 @@ myEmitter.on('task', async (id) => {
         const product = await findProduct(data)
 
         if (!product) {
+            log.info('No product data!')
             myEmitter.emit('task', id)
             return
         }
@@ -270,18 +287,26 @@ myEmitter.on('task', async (id) => {
         //myEmitter.setMaxListeners(Math.max(myEmitter.getMaxListeners() - 1, 0))
         var browser = undefined
         try {
-            browser = await puppeteer.launch({
-                headless: false,
+            var browserOptions = {
+                headless: true,
                 args: [
                     `--window-size=${400},${600}`,
                     '--no-sandbox',
                     "--disable-gpu",
                     "--start-maximized",
-                    "--disable-infobars"
+                    "--disable-infobars",
+                    '--disable-extensions'
                 ],
                 ignoreHTTPSErrors: true,
-                //executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
-            })
+                executablePath: settings['executablePath'] ||"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+            }
+            if (data['proxy']) {
+                console.log(`Task using proxy: ${data['proxy']}`)
+                log.info(`Task using proxy: ${data['proxy']}`)
+            }
+            browser = await puppeteer.launch(browserOptions)
+
+            log.info('Started Browser')
 
             const taskStatus = setInterval(checkTaskStatus, 1000);
 
@@ -309,8 +334,8 @@ myEmitter.on('task', async (id) => {
                 hasTouch: false
             })
             await page.setUserAgent(userAgent);
-            page.setDefaultTimeout(2000);
-            page.setDefaultNavigationTimeout(5000);
+            page.setDefaultTimeout(4000);
+            page.setDefaultNavigationTimeout(10000);
 
             page.on('request', async interceptedRequest => {
                 var requestURL = interceptedRequest.url()
@@ -319,6 +344,8 @@ myEmitter.on('task', async (id) => {
                     success = true
                     changeTaskStatus(id, 'paypal', true)
                     await open(requestURL);
+                    log.info('PayPal redirect ', + requestURL)
+                    notify('PayPal redirect', `You've been redirected to PayPal`, requestURL)
                     await page.close();
                     await browser.close();
                     page = undefined
@@ -327,6 +354,7 @@ myEmitter.on('task', async (id) => {
                     interceptedRequest.abort();
                 } else if (requestURL.includes('status.json')) {
                     console.log(requestURL)
+                    log.info('Requesting status endpoint')
                     isStatusEndpoint = true
                     checkStatus(requestURL)
                     interceptedRequest.continue();
@@ -372,6 +400,7 @@ myEmitter.on('task', async (id) => {
             }
             if (!cartValid) {
                 changeTaskStatus(id, 'ATC failed')
+                log.info('Cart is invalid')
                 await browser.close()
                 myEmitter.emit('task', id)
                 return
@@ -390,6 +419,8 @@ myEmitter.on('task', async (id) => {
             }
 
             changeTaskStatus(id, 'Fill out data')
+
+            log.info('Fill out data')
 
             const form = await formParser().catch(e => {
                 console.log(e)
@@ -490,18 +521,19 @@ myEmitter.on('task', async (id) => {
                     const siteChecker = setInterval(checkSite, 500);
                     async function checkSite() {
                         location = await page.evaluate(() => document.location.href)
-                        var orderNo = await page.evaluate(() => {
-                            return $('#order-id').val()
-                        })
-                        if (isStatusEndpoint) {
-                            clearInterval(siteChecker)
-                            return
-                        } else if (location.includes('checkout.json')) {
+                        if (location.includes('checkout.json')) {
                             clearInterval(siteChecker)
                             changeTaskStatus(id, 'failed', false)
                             await browser.close()
                             await sleep(500)
                             myEmitter.emit('task', id)
+                            return
+                        }
+                        var orderNo = await page.evaluate(() => {
+                            return $('#order-id').val()
+                        })
+                        if (isStatusEndpoint) {
+                            clearInterval(siteChecker)
                             return
                         } else if (location.includes('chargeError')) {
                             clearInterval(siteChecker)
@@ -517,6 +549,12 @@ myEmitter.on('task', async (id) => {
                                 path: app.getPath('desktop') + `/BOEHLERIO_${data['id']}.png`
                             })
                             await browser.close()
+                            return
+                        } else if (location.includes('dup')) {
+                            clearInterval(siteChecker)
+                            changeTaskStatus(id, 'dupicate', false)
+                            await browser.close()
+                            await sleep(500)
                             return
                         }
                     }
@@ -537,12 +575,16 @@ myEmitter.on('task', async (id) => {
                     await sleep(250)
                     checkStatus(url)
                 } else if (orderData['status'] === 'paid') {
-                    changeTaskStatus(id, 'paid')
+                    changeTaskStatus(id, `#${orderData['id'] || 'NaN'}`, true)
                     await sleep(250)
                     await page.screenshot({
                         path: app.getPath('desktop') + `/BOEHLERIO_${data['id']}.png`
                     })
+                    await page.close()
+                    await browser.close()
+                    return
                 } else if (orderData['status'] === 'failed') {
+                    changeTaskStatus(id, 'failed', false)
                     await page.close()
                     await browser.close()
                     myEmitter.emit('task', id)
@@ -551,6 +593,8 @@ myEmitter.on('task', async (id) => {
             }
         } catch (error) {
             console.log('Browser mode error', error, typeof browser)
+            log.error('Browser Mode error')
+            log.error(error)
             if (browser) await browser.close()
             myEmitter.emit('task', id)
         }

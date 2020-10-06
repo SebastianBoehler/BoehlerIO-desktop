@@ -15,8 +15,9 @@ window.addEventListener("load", async () => {
         const category = $('#category').val()
         const taskAmount = Number($('#taskAmount').val())
         const profile = $('#profile').val()
+        const proxy = $('#proxy').val()
 
-        ipcRenderer.send('saveTask', {
+        var options = {
             keywords: keywords,
             mode: mode,
             size: size,
@@ -25,6 +26,10 @@ window.addEventListener("load", async () => {
             category: category,
             taskAmount: taskAmount,
             profile: profile
-        })
+        }
+
+        if (proxy.length > 5) options['proxy'] = proxy
+
+        ipcRenderer.send('saveTask', options)
     }
 })

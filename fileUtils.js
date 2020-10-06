@@ -2,6 +2,9 @@ const DiscordRPC = require('discord-rpc');
 const fetch = require('node-fetch');
 var HttpsProxyAgent = require('https-proxy-agent');
 var Cookie = require('request-cookies').Cookie;
+const {
+    Notification
+} = require('electron')
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -31,7 +34,9 @@ module.exports = {
 
     formatCookie: formatCookies,
 
-    isStopped: isStopped
+    isStopped: isStopped,
+
+    notify: notify
 }
 
 function rndString() {
@@ -298,4 +303,16 @@ async function formatCookies(oldCookieString, newCookieString) {
 async function isStopped(task) {
     if (task['status'] === 'stopped') return true
     else false
+}
+
+async function notify(title, message, url, image) {
+    var options = {}
+
+    if (message) options['body'] = message
+    if (image) options['icon'] = image
+
+    console.log(options)
+
+    //const myNotification = new Notification(title, options)
+    //myNotification.show()
 }
