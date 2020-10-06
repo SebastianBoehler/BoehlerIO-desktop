@@ -12,9 +12,6 @@ const {
     findProduct,
     isStopped
 } = require('./fileUtils');
-const {
-    Worker
-} = require('worker_threads');
 const server = require('./server');
 const Store = require('electron-store');
 const open = require('open')
@@ -490,19 +487,38 @@ myEmitter.on('task', async (id) => {
                 await page.click('#checkout-form > .checkout-section-container > #checkout-buttons > #submit_button > span')
                 await sleep(3000)
                 if (!success && page !== undefined) {
-                    location = await page.evaluate(() => document.location.href)
-                    if (location.includes('checkout.json')) {
-                        changeTaskStatus(id, 'failed', false)
-                        await browser.close()
-                        await sleep(500)
-                        myEmitter.emit('task', id)
-                        return
-                    } else if (location.includes('chargeError')) {
-                        changeTaskStatus(id, 'failed', false)
-                        await browser.close()
-                        await sleep(500)
-                        myEmitter.emit('task', id)
-                        return
+                    const siteChecker = setInterval(checkSite, 500);
+                    async function checkSite() {
+                        location = await page.evaluate(() => document.location.href)
+                        var orderNo = await page.evaluate(() => {
+                            return $('#order-id').val()
+                        })
+                        if (isStatusEndpoint) {
+                            clearInterval(siteChecker)
+                            return
+                        } else if (location.includes('checkout.json')) {
+                            clearInterval(siteChecker)
+                            changeTaskStatus(id, 'failed', false)
+                            await browser.close()
+                            await sleep(500)
+                            myEmitter.emit('task', id)
+                            return
+                        } else if (location.includes('chargeError')) {
+                            clearInterval(siteChecker)
+                            changeTaskStatus(id, 'failed', false)
+                            await browser.close()
+                            await sleep(500)
+                            myEmitter.emit('task', id)
+                            return
+                        } else if (orderNo) {
+                            clearInterval(siteChecker)
+                            changeTaskStatus(id, orderNo, true)
+                            await page.screenshot({
+                                path: app.getPath('desktop') + `/BOEHLERIO_${data['id']}.png`
+                            })
+                            await browser.close()
+                            return
+                        }
                     }
                 }
             }
