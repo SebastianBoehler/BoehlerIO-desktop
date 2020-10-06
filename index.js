@@ -76,7 +76,7 @@ app.on('ready', () => {
     })
 
     mainWindow.loadURL('http://localhost:5050/')
-    //mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
     mainWindow.on('page-title-updated', (evt) => {
         evt.preventDefault();
     });
@@ -107,6 +107,8 @@ ipcMain.on('loadProfile', async (event, data) => {
 })
 
 ipcMain.on('saveTask', async (event, data) => {
+    log.info('Saving task')
+    log.info(JSON.stringify(data, null, 2))
     var tasks = await store.get('tasks')
     if (!tasks || !Array.isArray(tasks)) tasks = []
     for (var a = 0; a < data['taskAmount']; a++) {
@@ -344,7 +346,7 @@ myEmitter.on('task', async (id) => {
                     success = true
                     changeTaskStatus(id, 'paypal', true)
                     await open(requestURL);
-                    log.info('PayPal redirect ', + requestURL)
+                    log.info('PayPal redirect ' + requestURL)
                     notify('PayPal redirect', `You've been redirected to PayPal`, requestURL)
                     await page.close();
                     await browser.close();
@@ -417,6 +419,7 @@ myEmitter.on('task', async (id) => {
                     visible: true
                 })
             }
+            captchaBank['required']++
 
             changeTaskStatus(id, 'Fill out data')
 
@@ -465,7 +468,6 @@ myEmitter.on('task', async (id) => {
             }
 
             changeTaskStatus(id, 'captcha required')
-            captchaBank['required']++
             const captchaInterval = setInterval(waitforToken, 200);
 
             async function formParser() {

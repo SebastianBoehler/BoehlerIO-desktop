@@ -1,9 +1,6 @@
 const {
     ipcRenderer
 } = require('electron')
-const {
-    sleep
-} = require('./fileUtils');
 
 window.addEventListener("load", async () => {
     window.saveTask = async () => {
