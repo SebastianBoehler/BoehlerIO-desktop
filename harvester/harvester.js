@@ -10,7 +10,7 @@ window.addEventListener("load", async (e) => {
     setTimeout(() => {
       location.href = 'https://supremenewyork.com/index'
       ipcRenderer.send('captcha-error', 'chrome-error')
-    }, 500);
+    }, 250);
   }
   else if (location.host.includes('supremenewyork')) {
     //alert('on supreme site')

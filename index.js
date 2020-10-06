@@ -58,7 +58,7 @@ setInterval(async () => {
             if (new Date().getTime() > captchaBank['tokens']['expiration']) captchaBank['tokens'].splice(a, 1)
         }
     }
-}, 100);
+}, 50);
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
@@ -467,6 +467,7 @@ myEmitter.on('task', async (id) => {
                 return
             }
 
+            const pageLoad = new Date().getTime()
             changeTaskStatus(id, 'captcha required')
             const captchaInterval = setInterval(waitforToken, 200);
 
@@ -511,7 +512,8 @@ myEmitter.on('task', async (id) => {
             }
 
             async function proceedCheckout(token) {
-                await sleep(data['checkoutDelay'])
+                const secondDate = new Date().getTime()
+                await sleep(data['checkoutDelay'] - (secondDate - pageLoad) * 1000)
                 changeTaskStatus(id, 'submitting')
                 await page.evaluate(async (token) => {
                     $('#g-recaptcha-response').val(token)
@@ -580,6 +582,7 @@ myEmitter.on('task', async (id) => {
                     checkStatus(url)
                 } else if (orderData['status'] === 'paid') {
                     changeTaskStatus(id, `#${orderData['id'] || 'NaN'}`, true)
+                    log.info(`Task ${id} is paid! ${orderData['id']}`)
                     await sleep(250)
                     await page.screenshot({
                         path: app.getPath('desktop') + `/BOEHLERIO_${data['id']}.png`

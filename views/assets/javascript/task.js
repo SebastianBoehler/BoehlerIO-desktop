@@ -14,6 +14,14 @@ window.addEventListener("load", async () => {
         const profile = $('#profile').val()
         const proxy = $('#proxy').val()
 
+        if (!keywords) {
+            alert('Please input keywords')
+            return
+        } else if (!category) {
+            alert('Please select a category')
+            return
+        }
+
         var options = {
             keywords: keywords,
             mode: mode,

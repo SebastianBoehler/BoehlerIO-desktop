@@ -1,6 +1,7 @@
 ﻿<!--<!DOCTYPE html>-->
 
 <html>
+
 <head>
 
     <!-- Title -->
@@ -13,11 +14,13 @@
 
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     <!------- Font ------->
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!------- CSS ------->
 
@@ -132,7 +135,7 @@
                                     </div>
                                     <div class="desc">
                                         <p>
-                                            Please make sure to read our detailed setup guide to learn more about the settings and their functionality
+                                            If you have any questions regarding the setup please dont hesitate to message us at anytime. We'll try to get back to you as soon as possible.
                                         </p>
                                     </div>
                                 </div>
@@ -184,14 +187,16 @@
                                                             <label>
                                                                 Checkout Delay (ms)
                                                             </label>
-                                                            <input type="number" class="form-control" id="checkoutDelay" value="2500" step="100" />
+                                                            <input type="number" class="form-control" id="checkoutDelay"
+                                                                value="2500" step="100" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-check check-primary">
-                                                            <input type="checkbox" class="form-check-input" id="storeScreenshot">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="storeScreenshot">
                                                             <label class="form-check-label">
                                                                 Store confirmation page screenshot on success
                                                             </label>
@@ -249,14 +254,16 @@
                                                             <label>
                                                                 Add to cart delay (ms)
                                                             </label>
-                                                            <input type="number" class="form-control" id="atcDelay" value="500" step="100"/>
+                                                            <input type="number" class="form-control" id="atcDelay"
+                                                                value="500" step="100" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-check check-primary">
-                                                            <input type="checkbox" class="form-check-input" id="highestQuantity">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="highestQuantity">
                                                             <label class="form-check-label">
                                                                 Always cart as many as possible
                                                             </label>
@@ -275,7 +282,14 @@
                                                     </div>
                                                     <div class="desc">
                                                         <p>
-                                                            General settings like discord stuff ...
+                                                            As site region please select the region your tasks are running on. If you're in the US use the "US" region, if you're using
+                                                            EU proxies select "EU" as region.
+                                                            <br><br>
+                                                            Discord notifications are currently unavailable!
+                                                            <br><br>
+                                                            The default Chrome executable path is shown as placeholder. If you
+                                                            installed chrome on an different path please change it to
+                                                            yours!
                                                         </p>
                                                     </div>
                                                 </div>
@@ -307,14 +321,16 @@
                                                             <label>
                                                                 discord Webhook
                                                             </label>
-                                                            <input type="text" class="form-control" id="discordWebhook"/>
+                                                            <input type="text" class="form-control"
+                                                                id="discordWebhook" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-check check-primary">
-                                                            <input type="checkbox" class="form-check-input" id="discordNotifications">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                id="discordNotifications" disabled>
                                                             <label class="form-check-label">
                                                                 Enable discord notifications
                                                             </label>
@@ -327,13 +343,15 @@
                                                             <label>
                                                                 Chrome executable path
                                                             </label>
-                                                            <input type="text" class="form-control" id="executablePath"/>
+                                                            <input type="text" class="form-control"
+                                                                id="executablePath" placeholder="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"/>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="submit" class="btn btn-block btn-form" onclick="saveSettings()">
+                                                        <button type="submit" class="btn btn-block btn-form"
+                                                            onclick="saveSettings()">
                                                             Save
                                                         </button>
                                                     </div>
@@ -358,4 +376,5 @@
     <script src="assets/javascript/bootstrap/bootstrap.min.js"></script>
     <script src="assets/javascript/custom-javascript.js"></script>
 </body>
+
 </html>
