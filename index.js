@@ -547,8 +547,9 @@ myEmitter.on('task', async (id) => {
                         } else if (orderNo) {
                             clearInterval(siteChecker)
                             changeTaskStatus(id, orderNo, true)
+                            log.info(`Task ${id} is paid! ${orderNo}`)
                             await page.screenshot({
-                                path: app.getPath('desktop') + `/BOEHLERIO_${data['id']}.png`
+                                path: app.getPath('desktop') + `/BOEHLERIO_${id}.png`
                             })
                             await browser.close()
                             return
