@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "node"
+os:
+  - osx
+  - windows
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run dist-osx; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then npm run dist-winp; fi
+branches:
+  only:
+    - master
+env:
+  - YARN_GPG=no
