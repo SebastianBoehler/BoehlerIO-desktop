@@ -53,6 +53,11 @@ setInterval(async () => {
             harvesterWindow.webContents.send('triggerCaptcha')
             isCurrentlySolving = true
         }
+    } else if (captchaBank['required'] > 0) {
+        const tasks = store.get('tasks')
+        var running = tasks.filter(item => item['status'] !== 'stopped')
+        if (running.length > 0) startHarvester()
+        else captchaBank['required'] = 0
     } else if (captchaBank['tokens'].length >= 1) {
         for (var a in captchaBank['tokens']) {
             if (new Date().getTime() > captchaBank['tokens']['expiration']) captchaBank['tokens'].splice(a, 1)
@@ -76,7 +81,7 @@ app.on('ready', () => {
     })
 
     mainWindow.loadURL('http://localhost:5050/')
-    mainWindow.webContents.openDevTools()
+    //mainWindow.webContents.openDevTools()
     mainWindow.on('page-title-updated', (evt) => {
         evt.preventDefault();
     });
@@ -207,6 +212,7 @@ ipcMain.on('TriggeredCheck', (event, data) => {
     console.log('triggeredCheck', data)
     if (!data) isCurrentlySolving = false
 })
+
 async function changeTaskStatus(id, status, success) {
     var tasks = await store.get('tasks')
     var task = (tasks.filter(item => item['id'] === id))[0]
@@ -300,7 +306,7 @@ myEmitter.on('task', async (id) => {
                     '--disable-extensions'
                 ],
                 ignoreHTTPSErrors: true,
-                executablePath: settings['executablePath'] ||"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+                executablePath: settings['executablePath'] || "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
             }
             if (data['proxy']) {
                 console.log(`Task using proxy: ${data['proxy']}`)
@@ -338,6 +344,34 @@ myEmitter.on('task', async (id) => {
             await page.setUserAgent(userAgent);
             page.setDefaultTimeout(4000);
             page.setDefaultNavigationTimeout(10000);
+
+            page.on('error', async err => {
+                console.log('error happen at the page: ', err);
+                log.error(error)
+                await browser.close()
+                myEmitter.emit('task', id)
+                return
+            });
+
+            browser.on('disconnected', async (err) => {
+                if (!success) {
+                    console.log('browser error', err)
+                    log.error('disconnected error')
+                    await browser.close()
+                    myEmitter.emit('task', id)
+                    return
+                }
+            })
+
+            browser.on('targetdestroyed', async (err) => {
+                if (!success) {
+                    console.log('target error', err)
+                    log.error('targetdestroyed error')
+                    await browser.close()
+                    myEmitter.emit('task', id)
+                    return
+                }
+            })
 
             page.on('request', async interceptedRequest => {
                 var requestURL = interceptedRequest.url()
@@ -430,6 +464,18 @@ myEmitter.on('task', async (id) => {
             })
 
             var billingProfile = await getBillingProfile(data['profile'])
+                .catch(e => {
+                    console.log('form parser error', e)
+                    log.error('form parser', e)
+                    return undefined
+                })
+
+            if (!billingProfile) {
+                changeTaskStatus(id, 'failed')
+                await browser.close()
+                myEmitter.emit('task', id)
+                return
+            }
             if (region === 'us' && billingProfile['type'] !== 'paypal') billingProfile['type'] = 'credit_card'
 
             const dataEU = {
@@ -548,6 +594,7 @@ myEmitter.on('task', async (id) => {
                             return
                         } else if (orderNo) {
                             clearInterval(siteChecker)
+                            success = true
                             changeTaskStatus(id, orderNo, true)
                             log.info(`Task ${id} is paid! ${orderNo}`)
                             await page.screenshot({
@@ -581,6 +628,7 @@ myEmitter.on('task', async (id) => {
                     await sleep(250)
                     checkStatus(url)
                 } else if (orderData['status'] === 'paid') {
+                    success = true
                     changeTaskStatus(id, `#${orderData['id'] || 'NaN'}`, true)
                     log.info(`Task ${id} is paid! ${orderData['id']}`)
                     await sleep(250)
