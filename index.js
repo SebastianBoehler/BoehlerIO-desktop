@@ -570,6 +570,7 @@ myEmitter.on('task', async (id) => {
                         console.log(e)
                     })
                 console.log(JSON.stringify(orderData, null, 2))
+                log.info(`Task ${id} order status: ${orderData['status']}`)
                 if (orderData['status'] !== 'paid' || orderData['status'] !== 'failed') {
                     if (orderData['status'] === 'cca') changeTaskStatus(id, '3DS authentication required')
                     await sleep(250)
