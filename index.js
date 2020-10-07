@@ -284,6 +284,7 @@ myEmitter.on('task', async (id) => {
         const product = await findProduct(data)
 
         if (!product) {
+            await sleep(250)
             log.info('No product data!')
             myEmitter.emit('task', id)
             return
