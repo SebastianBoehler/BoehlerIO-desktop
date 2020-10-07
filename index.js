@@ -272,7 +272,7 @@ myEmitter.on('task', async (id) => {
         var success = false
         var isStatusEndpoint = false
         console.log(id, new Date().getTime())
-        if (data['status'] === 'stopped') {
+        if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'paid' || data['status'] === 'success') {
             log.info(`Stopped task ${id}`)
             console.log('stopped')
             return
@@ -296,7 +296,7 @@ myEmitter.on('task', async (id) => {
         var browser = undefined
         try {
             var browserOptions = {
-                headless: true,
+                headless: false,
                 args: [
                     `--window-size=${400},${600}`,
                     '--no-sandbox',
@@ -306,11 +306,14 @@ myEmitter.on('task', async (id) => {
                     '--disable-extensions'
                 ],
                 ignoreHTTPSErrors: true,
-                executablePath: settings['executablePath'] || "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+                //executablePath: settings['executablePath'] || "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
             }
+            if (settings['executablePath'].length >= 5) browserOptions['executablePath'] = settings['executablePath']
             if (data['proxy']) {
+                const realProxy = data['proxy'].split(':')
                 console.log(`Task using proxy: ${data['proxy']}`)
                 log.info(`Task using proxy: ${data['proxy']}`)
+                browserOptions['args'].push(`--proxy-server=${realProxy[0]}:${realProxy[1]}`, )
             }
             browser = await puppeteer.launch(browserOptions)
 
@@ -344,6 +347,14 @@ myEmitter.on('task', async (id) => {
             await page.setUserAgent(userAgent);
             page.setDefaultTimeout(4000);
             page.setDefaultNavigationTimeout(10000);
+
+            if (data['proxy']) {
+                const realProxy = data['proxy'].split(':')
+                await page.authenticate({
+                    username: realProxy[2],
+                    password: realProxy[3]
+                })
+            }
 
             page.on('error', async err => {
                 console.log('error happen at the page: ', err);
@@ -549,10 +560,11 @@ myEmitter.on('task', async (id) => {
                 //console.log(captchaBank['tokens'])
                 for (var a in captchaBank['tokens']) {
                     if (captchaBank['tokens'][a]['timestamp'] > atcTimestamp) {
+                        clearInterval(captchaInterval)
                         const token = captchaBank['tokens'][a]['token']
                         captchaBank['tokens'].splice(a, 1)
                         proceedCheckout(token)
-                        clearInterval(captchaInterval)
+                        return
                     }
                 }
             }
@@ -582,6 +594,10 @@ myEmitter.on('task', async (id) => {
                         var orderNo = await page.evaluate(() => {
                             return $('#order-id').val()
                         })
+                        var error = await page.evaluate(() => {
+                            return $('#error').text()
+                        })
+                        console.log(error)
                         if (isStatusEndpoint) {
                             clearInterval(siteChecker)
                             return
@@ -604,10 +620,18 @@ myEmitter.on('task', async (id) => {
                             return
                         } else if (location.includes('dup')) {
                             clearInterval(siteChecker)
-                            changeTaskStatus(id, 'dupicate', false)
+                            changeTaskStatus(id, 'duplicate', false)
                             await browser.close()
                             await sleep(500)
                             return
+                        } else if (error) {
+                            if (error.includes('You have previously ordered')) {
+                                clearInterval(siteChecker)
+                                changeTaskStatus(id, 'duplicate', false)
+                                await browser.close()
+                                await sleep(500)
+                                return
+                            }
                         }
                     }
                 }
