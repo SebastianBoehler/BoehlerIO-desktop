@@ -296,7 +296,7 @@ myEmitter.on('task', async (id) => {
         var browser = undefined
         try {
             var browserOptions = {
-                headless: false,
+                headless: true,
                 args: [
                     `--window-size=${400},${600}`,
                     '--no-sandbox',
