@@ -24,9 +24,7 @@ module.exports = {
 
     rndString: rndString,
 
-    sleep: function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
-    },
+    sleep: sleep,
 
     findProduct: findProduct,
 
@@ -64,6 +62,10 @@ function rndString() {
         resolve(keyString)
     })
 
+}
+
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 async function findProduct(task) {
@@ -120,12 +122,18 @@ async function findProduct(task) {
             return
         }
 
+        await sleep(150)
+
         const productStock = await fetch(`https://www.supremenewyork.com/shop/${product['id']}.json?rnd=${await rndString()}`, {
                 "headers": {
                     "user-agent": task['userAgent'],
                     "cookie": cookieString
                 },
-                method: 'GET',
+                "referrerPolicy": "strict-origin-when-cross-origin",
+                "body": null,
+                "method": "GET",
+                "mode": "cors",
+                "credentials": "omit",
                 timeout: 2500
             })
             .then(async resp => {
@@ -167,7 +175,7 @@ async function findProduct(task) {
                 if (sizes.length === 1) isOneSizeItem = true
                 for (var a in sizes) {
                     const name = sizes[a]['name'].toUpperCase()
-                    console.log(size, name, sizes[a]['stock_level'])
+                    //console.log(size, name, sizes[a]['stock_level'])
                     if ((size === 'ANY' || size === 'RANDOM' || size === '') && sizes[a]['stock_level'] === 1) return sizes[a]['id']
                     else if (name.includes(size) && sizes[a]['stock_level'] === 1 && size !== '') {
                         return sizes[a]['id']
@@ -180,7 +188,7 @@ async function findProduct(task) {
                     if (sizes.length === 1) isOneSizeItem = true
                     for (var a in sizes) {
                         const name = sizes[a]['name'].toUpperCase()
-                        console.log(size, name, sizes[a]['stock_level'])
+                        //console.log(size, name, sizes[a]['stock_level'])
                         if ((size === 'ANY' || size === 'RANDOM' || size === '') && sizes[a]['stock_level'] === 1) {
                             style = style[b]
                             return sizes[a]['id']

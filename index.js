@@ -20,6 +20,8 @@ const store = new Store({
     encryptionKey: 'AS-asd-654'
 });
 
+const fetch = require('node-fetch')
+
 const log = require('electron-log');
 
 log.catchErrors()
@@ -273,12 +275,13 @@ myEmitter.on('task', async (id) => {
         var data = (tasks.filter(item => item['id'] === id))[0]
         var success = false
         var isStatusEndpoint = false
-        console.log(id, new Date().getTime())
+        console.log(id, new Date().getTime(), data['status'] )
         if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'paid' || data['status'] === 'success') {
             log.info(`Stopped task ${id}`)
             console.log('stopped')
             return
         }
+        changeTaskStatus(id, 'searching')
 
         const userAgent = await getUserAgent()
         data['userAgent'] = userAgent
@@ -286,7 +289,7 @@ myEmitter.on('task', async (id) => {
         const product = await findProduct(data)
 
         if (!product) {
-            await sleep(250)
+            await sleep(750)
             log.info('No product data!')
             myEmitter.emit('task', id)
             return
@@ -327,7 +330,8 @@ myEmitter.on('task', async (id) => {
             async function checkTaskStatus() {
                 var tasks = await store.get('tasks')
                 var data = (tasks.filter(item => item['id'] === id))[0]
-                if (data['status'] === 'stopped') {
+                console.log('taskData',data)
+                if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
                     await browser.close()
                     return
                 } else if (!browser || success) {
@@ -476,6 +480,8 @@ myEmitter.on('task', async (id) => {
             const form = await formParser().catch(e => {
                 console.log(e)
             })
+
+            log.info(form)
 
             var billingProfile = await getBillingProfile(data['profile'])
                 .catch(e => {
@@ -647,7 +653,12 @@ myEmitter.on('task', async (id) => {
                     })
                     .catch(e => {
                         console.log(e)
+                        return undefined
                     })
+                if (!orderData) {
+                    checkStatus(url)
+                    return
+                }
                 console.log(JSON.stringify(orderData, null, 2))
                 log.info(`Task ${id} order status: ${orderData['status']}`)
                 if (orderData['status'] !== 'paid' || orderData['status'] !== 'failed') {
