@@ -16,7 +16,9 @@ const {
 const server = require('./server');
 const Store = require('electron-store');
 const open = require('open');
-const store = new Store();
+const store = new Store({
+    encryptionKey: 'AS-asd-654'
+});
 
 const log = require('electron-log');
 
@@ -297,7 +299,7 @@ myEmitter.on('task', async (id) => {
         var browser = undefined
         try {
             var browserOptions = {
-                headless: true,
+                headless: false,
                 args: [
                     `--window-size=${400},${600}`,
                     '--no-sandbox',
