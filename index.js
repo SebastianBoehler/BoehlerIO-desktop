@@ -328,10 +328,14 @@ myEmitter.on('task', async (id) => {
             const taskStatus = setInterval(checkTaskStatus, 1000);
 
             async function checkTaskStatus() {
-                var tasks = await store.get('tasks')
-                var data = (tasks.filter(item => item['id'] === id))[0]
-                console.log('taskData',data)
-                if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
+                tasks = await store.get('tasks')
+                data = (tasks.filter(item => item['id'] === id))[0]
+                //console.log('taskData',data)
+                if (!data) {
+                    log.error('no task data', data, id)
+                }
+                else if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
+                    clearInterval(taskStatus)
                     await browser.close()
                     return
                 } else if (!browser || success) {
@@ -514,9 +518,37 @@ myEmitter.on('task', async (id) => {
                 'credit_card[year]': 'year',
                 'credit_card[ovv]': 'cvv'
             }
+            const dataUS = {
+                'order[billing_name]': 'name',
+                'order[bn]': 'name',
+                'order[email]': 'email',
+                'order[tel]': 'phone',
+                'order[billing_address]': 'address',
+                'order[billing_address_2]': 'address2',
+                'order[billing_city]': 'city',
+                'order[billing_zip]': 'zip',
+                'order[billing_state]': 'state',
+                'order[billing_country]': 'country',
+                'credit_card[type]': 'type',
+                'riearmxa': 'ccnumber',
+                'credit_card[month]': 'month',
+                'credit_card[year]': 'year',
+                'credit_card[ovv]': 'cvv'
+            }
 
-            for (var a in dataEU) {
+            console.log(region)
+
+            if (region === 'eu') for (var a in dataEU) {
                 const field = (form.filter(item => item['name'] === a))[0]
+                if (!field) continue
+                await page.evaluate(async (field, data) => {
+                    console.log(field['id'], data, field)
+                    $(`#${field['id']}`).val(data)
+                }, field, billingProfile[dataEU[a]])
+                if (billingProfile[dataEU[a]] === 'paypal') break
+            } else if (region === 'us') for (var a in dataUS) {
+                const field = (form.filter(item => item['name'] === a))[0]
+                if (!field) continue
                 await page.evaluate(async (field, data) => {
                     console.log(field['id'], data, field)
                     $(`#${field['id']}`).val(data)
@@ -574,6 +606,10 @@ myEmitter.on('task', async (id) => {
                         captchaBank['tokens'].splice(a, 1)
                         proceedCheckout(token)
                         return
+                    } else if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
+                        clearInterval(captchaInterval)
+                        if (browser) await browser.close()
+                        return
                     }
                 }
             }
@@ -587,7 +623,7 @@ myEmitter.on('task', async (id) => {
                     //document.getElementById("mobile_checkout_form").setAttribute("data-verified", "done")
                 }, token)
                 await page.click('#checkout-form > .checkout-section-container > #checkout-buttons > #submit_button > span')
-                await sleep(3000)
+                await sleep(3500)
                 if (!success && page !== undefined) {
                     const siteChecker = setInterval(checkSite, 500);
                     async function checkSite() {
