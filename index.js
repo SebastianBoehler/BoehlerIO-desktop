@@ -11,7 +11,8 @@ const {
     getUserAgent,
     findProduct,
     isStopped,
-    notify
+    notify,
+    discordMessage
 } = require('./fileUtils');
 const server = require('./server');
 const Store = require('electron-store');
@@ -295,7 +296,7 @@ myEmitter.on('task', async (id) => {
             return
         }
 
-        console.log(product)
+        //console.log(product['item'])
 
         changeTaskStatus(id, 'start browser')
         //myEmitter.setMaxListeners(Math.max(myEmitter.getMaxListeners() - 1, 0))
@@ -408,6 +409,14 @@ myEmitter.on('task', async (id) => {
                     await open(requestURL);
                     log.info('PayPal redirect ' + requestURL)
                     notify('PayPal redirect', `You've been redirected to PayPal`, requestURL)
+                    discordMessage({
+                        message: `You've been redirected to PayPal`,
+                        item: product['item']['name'],
+                        size: product['item']['size'],
+                        style: product['item']['style'],
+                        productImage: product['item']['image_url'],
+                        paypal: requestURL
+                    })
                     await page.close();
                     await browser.close();
                     page = undefined
@@ -416,8 +425,10 @@ myEmitter.on('task', async (id) => {
                     interceptedRequest.abort();
                 } else if (requestURL.includes('status.json')) {
                     console.log(requestURL)
-                    log.info('Requesting status endpoint ' + requestURL)
-                    if (!isStatusEndpoint) checkStatus(requestURL)
+                    if (!isStatusEndpoint) {
+                        log.info('Requesting status endpoint ' + requestURL)
+                        checkStatus(requestURL)
+                    }
                     isStatusEndpoint = true
                     interceptedRequest.continue();
                 } else {
@@ -468,6 +479,13 @@ myEmitter.on('task', async (id) => {
                 return
             } else console.log('cart is valid!')
             captchaBank['required']++
+            discordMessage({
+                message: `Added to cart and validated cart!`,
+                item: product['item']['name'],
+                size: product['item']['size'],
+                style: product['item']['style'],
+                productImage: product['item']['image_url'],
+            })
             await sleep(200);
             await page.click('#container > header > #cart-link > #checkout-now > span');
 
@@ -657,6 +675,7 @@ myEmitter.on('task', async (id) => {
                             changeTaskStatus(id, 'failed', false)
                             await browser.close()
                             await sleep(500)
+                            orderFailed()
                             myEmitter.emit('task', id)
                             return
                         } else if (orderNo) {
@@ -667,6 +686,7 @@ myEmitter.on('task', async (id) => {
                             await page.screenshot({
                                 path: app.getPath('desktop') + `/BOEHLERIO_${id}.png`
                             })
+                            orderSuccessful()
                             await browser.close()
                             return
                         } else if (location.includes('dup')) {
@@ -680,6 +700,13 @@ myEmitter.on('task', async (id) => {
                                 clearInterval(siteChecker)
                                 changeTaskStatus(id, 'duplicate', false)
                                 await browser.close()
+                                discordMessage({
+                                    message: `You have previously ordered this item! Only one item per customer!`,
+                                    item: product['item']['name'],
+                                    size: product['item']['size'],
+                                    style: product['item']['style'],
+                                    productImage: product['item']['image_url'],
+                                })
                                 await sleep(500)
                                 return
                             }
@@ -688,10 +715,31 @@ myEmitter.on('task', async (id) => {
                 }
             }
 
+            function orderFailed() {
+                discordMessage({
+                    message: `Checkout failed!`,
+                    item: product['item']['name'],
+                    size: product['item']['size'],
+                    style: product['item']['style'],
+                    productImage: product['item']['image_url'],
+                })
+            }
+
+            function orderSuccessful() {
+                discordMessage({
+                    message: `Checkout successful!`,
+                    item: product['item']['name'],
+                    size: product['item']['size'],
+                    style: product['item']['style'],
+                    productImage: product['item']['image_url'],
+                })
+            }
+
             async function checkStatus(url) {
                 var orderData = await fetch(url)
                     .then(async resp => {
-                        return (await resp.json())
+                        const data = await resp.json()
+                        return data
                     })
                     .catch(e => {
                         console.log(e)
@@ -702,7 +750,7 @@ myEmitter.on('task', async (id) => {
                     return
                 }
                 console.log(JSON.stringify(orderData, null, 2))
-                log.info(`Task ${id} order status: ${orderData['status']}`)
+                log.info(`Task ${id} order status: ${orderData['status']},| ${orderData['status'] === 'paid'}`)
                 if (orderData['status'] !== 'paid' || orderData['status'] !== 'failed') {
                     if (orderData['status'] === 'cca') changeTaskStatus(id, '3DS authentication required')
                     await sleep(250)
@@ -713,12 +761,22 @@ myEmitter.on('task', async (id) => {
                     log.info(`Task ${id} is paid! ${orderData['id']}`)
                     await sleep(250)
                     await page.screenshot({
-                        path: app.getPath('desktop') + `/BOEHLERIO_${data['id']}.png`
+                        path: app.getPath('desktop') + `/BOEHLERIO_${orderData['id']}.png`
+                    })
+                    discordMessage({
+                        message: `Checkout successful!`,
+                        item: product['item']['name'],
+                        size: product['item']['size'],
+                        style: product['item']['style'],
+                        productImage: product['item']['image_url'],
+                        orderID: orderData['id'],
+                        image: app.getPath('desktop') + `/BOEHLERIO_${orderData['id']}.png`
                     })
                     await page.close()
                     await browser.close()
                     return
                 } else if (orderData['status'] === 'failed') {
+                    orderFailed()
                     changeTaskStatus(id, 'failed', false)
                     await page.close()
                     await browser.close()

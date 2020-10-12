@@ -4,7 +4,14 @@ var HttpsProxyAgent = require('https-proxy-agent');
 var Cookie = require('request-cookies').Cookie;
 const {
     Notification
-} = require('electron')
+} = require('electron');
+const Store = require('electron-store');
+const store = new Store({
+    encryptionKey: 'AS-asd-654'
+});
+
+const Discord = require('discord.js');
+const e = require('express');
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -34,7 +41,9 @@ module.exports = {
 
     isStopped: isStopped,
 
-    notify: notify
+    notify: notify,
+
+    discordMessage: discordMessage
 }
 
 function rndString() {
@@ -108,7 +117,7 @@ async function findProduct(task) {
         //console.log(categoryData)
         const keywords = task['keywords'].replaceAll(' ', '').split(',')
 
-        var product
+        var product = {}
         for (var a in categoryData) {
             const match = await checkKeywords(categoryData[a]['name'], keywords)
             if (match) {
@@ -164,6 +173,7 @@ async function findProduct(task) {
             size: size,
             style: style,
             id: product['id'],
+            item: product,
             isOneSizeItem: isOneSizeItem
         })
 
@@ -176,8 +186,11 @@ async function findProduct(task) {
                 for (var a in sizes) {
                     const name = sizes[a]['name'].toUpperCase()
                     //console.log(size, name, sizes[a]['stock_level'])
-                    if ((size === 'ANY' || size === 'RANDOM' || size === '') && sizes[a]['stock_level'] === 1) return sizes[a]['id']
-                    else if (name.includes(size) && sizes[a]['stock_level'] === 1 && size !== '') {
+                    if ((size === 'ANY' || size === 'RANDOM' || size === '') && sizes[a]['stock_level'] === 1) {
+                        product['size'] = sizes[a]['name']
+                        return sizes[a]['id']
+                    } else if (name.includes(size) && sizes[a]['stock_level'] === 1 && size !== '') {
+                        product['size'] = sizes[a]['name']
                         return sizes[a]['id']
                     }
                 }
@@ -191,10 +204,13 @@ async function findProduct(task) {
                         //console.log(size, name, sizes[a]['stock_level'])
                         if ((size === 'ANY' || size === 'RANDOM' || size === '') && sizes[a]['stock_level'] === 1) {
                             style = style[b]
+                            product['size'] = sizes[a]['name']
+                            product['style'] = (productStock['styles'].filter(item => item['id'] === style2[b]))[0]
                             return sizes[a]['id']
-                        }
-                        else if (name.includes(size) && sizes[a]['stock_level'] === 1 && size !== '') {
+                        } else if (name.includes(size) && sizes[a]['stock_level'] === 1 && size !== '') {
                             style = style[b]
+                            product['size'] = sizes[a]['name']
+                            product['style'] = (productStock['styles'].filter(item => item['id'] === style2[b]))[0]
                             return sizes[a]['id']
                         }
                     }
@@ -204,11 +220,14 @@ async function findProduct(task) {
 
         async function findStyle(productStock) {
             var style = task['color'].toUpperCase()
-            if (style === 'ANY' || style === 'RANDOM' || style === '') return productStock['styles'].map(item => item['id'])
+            if (style === 'ANY' || style === 'RANDOM' || style === '') {
+                return productStock['styles'].map(item => item['id'])
+            }
             var styleID = undefined
             for (var a in productStock['styles']) {
                 const name = productStock['styles'][a]['name'].toUpperCase()
                 if (name.includes(style)) {
+                    product['style'] = productStock['styles'][a]['name']
                     styleID = productStock['styles'][a]['id']
                     break
                 }
@@ -323,4 +342,27 @@ async function notify(title, message, url, image) {
 
     //const myNotification = new Notification(title, options)
     //myNotification.show()
+}
+
+async function discordMessage(data) {
+    const settings = store.get('settings')
+    const webhook = settings['discordWebhook'].split('/')
+    if (webhook.length >= 5) {
+        const webhookClient = new Discord.WebhookClient(webhook[webhook.length - 2], webhook[webhook.length - 1]);
+        var embed = new Discord.MessageEmbed()
+        embed.setAuthor('BOEHLER IO DESKTOP')
+        embed.setDescription(data['message'])
+        if (data['productImage']) embed.setThumbnail(`http:${data['productImage']}`)
+        embed.addFields({
+            name: 'Item',
+            value: `${data['item']} [${data['style']}/${data['size']}]`
+        })
+        if (data['orderID']) embed.addField('Order No', data['orderID'])
+        if (data['image']) {
+            const attachment = new Discord.MessageAttachment(data['image'], 'taskSuccess.png')
+            embed.setImage('attachment://taskSuccess.png')
+        }
+        if (data['paypal']) embed.addField('PayPal', `[checkout now](${data['paypal']})`)
+        webhookClient.send(embed)
+    }
 }
