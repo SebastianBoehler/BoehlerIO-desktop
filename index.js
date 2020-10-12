@@ -275,7 +275,7 @@ myEmitter.on('task', async (id) => {
         var data = (tasks.filter(item => item['id'] === id))[0]
         var success = false
         var isStatusEndpoint = false
-        console.log(id, new Date().getTime(), data['status'] )
+        console.log(id, new Date().getTime(), data['status'])
         if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'paid' || data['status'] === 'success') {
             log.info(`Stopped task ${id}`)
             console.log('stopped')
@@ -314,7 +314,9 @@ myEmitter.on('task', async (id) => {
                 ignoreHTTPSErrors: true,
                 //executablePath: settings['executablePath'] || "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
             }
-            if (settings['executablePath'].length >= 5) browserOptions['executablePath'] = settings['executablePath']
+            if (settings['executablePath'].length >= 5) {
+                browserOptions['executablePath'] = settings['executablePath']
+            }
             if (data['proxy']) {
                 const realProxy = data['proxy'].split(':')
                 console.log(`Task using proxy: ${data['proxy']}`)
@@ -333,8 +335,7 @@ myEmitter.on('task', async (id) => {
                 //console.log('taskData',data)
                 if (!data) {
                     log.error('no task data', data, id)
-                }
-                else if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
+                } else if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
                     clearInterval(taskStatus)
                     await browser.close()
                     return
@@ -370,7 +371,7 @@ myEmitter.on('task', async (id) => {
             page.on('error', async err => {
                 console.log('error happen at the page: ', err);
                 log.error(error)
-                await browser.close()
+                if (browser) await browser.close()
                 myEmitter.emit('task', id)
                 return
             });
@@ -378,9 +379,12 @@ myEmitter.on('task', async (id) => {
             browser.on('disconnected', async (err) => {
                 if (!success) {
                     console.log('browser error', err)
-                    log.error('disconnected error')
-                    await browser.close()
-                    myEmitter.emit('task', id)
+                    if (err) {
+                        log.error('disconnected error', err)
+                        myEmitter.emit('task', id)
+                    }
+                    if (browser) await browser.close()
+                    //changeTaskStatus(id, 'stopped')
                     return
                 }
             })
@@ -412,9 +416,9 @@ myEmitter.on('task', async (id) => {
                     interceptedRequest.abort();
                 } else if (requestURL.includes('status.json')) {
                     console.log(requestURL)
-                    log.info('Requesting status endpoint')
+                    log.info('Requesting status endpoint ' + requestURL)
+                    if (!isStatusEndpoint) checkStatus(requestURL)
                     isStatusEndpoint = true
-                    checkStatus(requestURL)
                     interceptedRequest.continue();
                 } else {
                     interceptedRequest.continue();
@@ -463,6 +467,7 @@ myEmitter.on('task', async (id) => {
                 myEmitter.emit('task', id)
                 return
             } else console.log('cart is valid!')
+            captchaBank['required']++
             await sleep(200);
             await page.click('#container > header > #cart-link > #checkout-now > span');
 
@@ -475,7 +480,6 @@ myEmitter.on('task', async (id) => {
                     visible: true
                 })
             }
-            captchaBank['required']++
 
             changeTaskStatus(id, 'Fill out data')
 
@@ -538,23 +542,25 @@ myEmitter.on('task', async (id) => {
 
             console.log(region)
 
-            if (region === 'eu') for (var a in dataEU) {
-                const field = (form.filter(item => item['name'] === a))[0]
-                if (!field) continue
-                await page.evaluate(async (field, data) => {
-                    console.log(field['id'], data, field)
-                    $(`#${field['id']}`).val(data)
-                }, field, billingProfile[dataEU[a]])
-                if (billingProfile[dataEU[a]] === 'paypal') break
-            } else if (region === 'us') for (var a in dataUS) {
-                const field = (form.filter(item => item['name'] === a))[0]
-                if (!field) continue
-                await page.evaluate(async (field, data) => {
-                    console.log(field['id'], data, field)
-                    $(`#${field['id']}`).val(data)
-                }, field, billingProfile[dataEU[a]])
-                if (billingProfile[dataEU[a]] === 'paypal') break
-            }
+            if (region === 'eu')
+                for (var a in dataEU) {
+                    const field = (form.filter(item => item['name'] === a))[0]
+                    if (!field) continue
+                    await page.evaluate(async (field, data) => {
+                        console.log(field['id'], data, field)
+                        $(`#${field['id']}`).val(data)
+                    }, field, billingProfile[dataEU[a]])
+                    if (billingProfile[dataEU[a]] === 'paypal') break
+                } else if (region === 'us')
+                    for (var a in dataUS) {
+                        const field = (form.filter(item => item['name'] === a))[0]
+                        if (!field) continue
+                        await page.evaluate(async (field, data) => {
+                            console.log(field['id'], data, field)
+                            $(`#${field['id']}`).val(data)
+                        }, field, billingProfile[dataEU[a]])
+                        if (billingProfile[dataEU[a]] === 'paypal') break
+                    }
 
             await page.evaluate(() => document.querySelector('#order_terms').click())
 
@@ -624,7 +630,7 @@ myEmitter.on('task', async (id) => {
                 }, token)
                 await page.click('#checkout-form > .checkout-section-container > #checkout-buttons > #submit_button > span')
                 await sleep(3500)
-                if (!success && page !== undefined) {
+                if (!success && page !== undefined && !isStatusEndpoint) {
                     const siteChecker = setInterval(checkSite, 500);
                     async function checkSite() {
                         location = await page.evaluate(() => document.location.href)
@@ -721,11 +727,21 @@ myEmitter.on('task', async (id) => {
                 }
             }
         } catch (error) {
-            console.log('Browser mode error', error, typeof browser)
+            tasks = await store.get('tasks')
+            data = (tasks.filter(item => item['id'] === id))[0]
+            //console.log('taskData',data)
+            if (!data) {
+                log.error('no task data', data, id)
+                return
+            } else if (data['status'] === 'stopped' || data['status'] === 'duplicate' || data['status'] === 'success') {
+                if (browser) await browser.close()
+                return
+            }
+            console.log('Browser mode error', error)
             log.error('Browser Mode error')
             log.error(error)
             if (browser) await browser.close()
-            myEmitter.emit('task', id)
+            if (error) myEmitter.emit('task', id)
         }
     })
 

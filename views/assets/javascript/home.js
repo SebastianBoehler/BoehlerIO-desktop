@@ -5,10 +5,6 @@ const {
     stat
 } = require('fs')
 
-ipcRenderer.send('test', {
-    action: document.location.href
-})
-
 window.addEventListener("load", async () => {
     //loadProfiles
     ipcRenderer.send('loadTasks')

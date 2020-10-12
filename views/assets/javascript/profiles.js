@@ -59,6 +59,7 @@ window.saveProfile = () => {
         month: month,
         year: year
     })
+    alert('Saved!', 'success', 'Your profile has been saved.')
 }
 
 window.addEventListener("load", async () => {
@@ -83,3 +84,13 @@ window.addEventListener("load", async () => {
         $('#year').val(data['year'])
     })
 })
+
+function alert(title, type, message) {
+    Swal.fire({
+        title: title,
+        text: message,
+        icon: type,
+        confirmButtonText: 'close',
+        timer: 10000
+    })
+}

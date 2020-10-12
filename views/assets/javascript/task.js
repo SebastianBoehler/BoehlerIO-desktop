@@ -15,10 +15,10 @@ window.addEventListener("load", async () => {
         const proxy = $('#proxy').val()
 
         if (!keywords) {
-            alert('Please input keywords')
+            alert(undefined, 'error', 'Please input keywords.')
             return
         } else if (!category) {
-            alert('Please select a category')
+            alert(undefined, 'error', 'Please select a category.')
             return
         }
 
@@ -36,5 +36,16 @@ window.addEventListener("load", async () => {
         if (proxy.length > 5) options['proxy'] = proxy
 
         ipcRenderer.send('saveTask', options)
+        //alert('Saved!', 'success', 'Your task has been created.')
     }
 })
+
+function alert(title, type, message) {
+    Swal.fire({
+        title: title,
+        text: message,
+        icon: type,
+        confirmButtonText: 'close',
+        timer: 15000
+    })
+}

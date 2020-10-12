@@ -1,4 +1,7 @@
 const { ipcRenderer, app } = require('electron')
+const openUrl = require('open')
+
+window.openUrl = openUrl
 
 window.saveSettings = () => {
     const checkoutDelay = Number($('#checkoutDelay').val())
@@ -20,6 +23,7 @@ window.saveSettings = () => {
         region: region,
         executablePath: executablePath
     })
+    alert('Saved!', 'success', 'Your settings have been saved.')
 }
 
 window.addEventListener("load", async () => {
@@ -37,3 +41,18 @@ window.addEventListener("load", async () => {
         $('#executablePath').val(data['executablePath'])
     })
 })
+
+ipcRenderer.on('alert', async (event, title, type, message) => {
+    console.log(title, type, message)
+    alert(title, type, message)
+})
+
+function alert(title, type, message) {
+    Swal.fire({
+        title: title,
+        text: message,
+        icon: type,
+        confirmButtonText: 'close',
+        timer: 15000
+    })
+}

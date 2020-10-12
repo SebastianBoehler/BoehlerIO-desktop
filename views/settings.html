@@ -34,6 +34,7 @@
 
     <script src="./assets/javascript/settings.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <!-- Desktop -->
@@ -285,11 +286,9 @@
                                                             As site region please select the region your tasks are running on. If you're in the US use the "US" region, if you're using
                                                             EU proxies select "EU" as region.
                                                             <br><br>
-                                                            Discord notifications are currently unavailable!
                                                             <br><br>
-                                                            The default Chrome executable path is shown as placeholder. If you
-                                                            installed chrome on an different path please change it to
-                                                            yours!
+                                                            To find the exectuable path of chrome on your OS please open <a>"chrome://version"</a> in google chrome.
+                                                            There will be a point called "executable path", please copy and paste this path
                                                         </p>
                                                     </div>
                                                 </div>
@@ -330,7 +329,7 @@
                                                     <div class="col">
                                                         <div class="form-check check-primary">
                                                             <input type="checkbox" class="form-check-input"
-                                                                id="discordNotifications" disabled>
+                                                                id="discordNotifications">
                                                             <label class="form-check-label">
                                                                 Enable discord notifications
                                                             </label>
@@ -344,16 +343,16 @@
                                                                 Chrome executable path
                                                             </label>
                                                             <input type="text" class="form-control"
-                                                                id="executablePath" placeholder="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"/>
+                                                                id="executablePath" placeholder=""/>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <button type="submit" class="btn btn-block btn-form"
+                                                        <a class="btn btn-block btn-form"
                                                             onclick="saveSettings()">
                                                             Save
-                                                        </button>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
