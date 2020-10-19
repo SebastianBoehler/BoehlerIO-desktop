@@ -479,6 +479,7 @@ myEmitter.on('task', async (id) => {
                 return
             } else console.log('cart is valid!')
             captchaBank['required']++
+            //console.log(product['item']['style'])
             discordMessage({
                 message: `Added to cart and validated cart!`,
                 item: product['item']['name'],
@@ -750,8 +751,8 @@ myEmitter.on('task', async (id) => {
                     return
                 }
                 console.log(JSON.stringify(orderData, null, 2))
-                log.info(`Task ${id} order status: ${orderData['status']},| ${orderData['status'] === 'paid'}`)
-                if (orderData['status'] !== 'paid' || orderData['status'] !== 'failed') {
+                log.info(`Task ${id} order status: ${orderData['status']} | ${orderData['status'] === 'paid'}`)
+                if (orderData['status'] !== 'paid' && orderData['status'] !== 'failed') {
                     if (orderData['status'] === 'cca') changeTaskStatus(id, '3DS authentication required')
                     await sleep(250)
                     checkStatus(url)

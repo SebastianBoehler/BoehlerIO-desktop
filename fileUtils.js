@@ -102,13 +102,14 @@ async function findProduct(task) {
             .then(async resp => {
                 let cookieString = resp.headers.get('set-cookie')
                 const data = await resp.json()
+                //console.log('mobile stock', data)
                 return {
                     data,
                     cookieString
                 }
             })
             .catch(e => {
-                console.log(e)
+                console.log('mobile stock error',e)
                 return undefined
             })
 
@@ -118,8 +119,10 @@ async function findProduct(task) {
 
         var product = {}
         for (var a in categoryData) {
+            console.log(categoryData[a]['name'])
             const match = await checkKeywords(categoryData[a]['name'], keywords)
             if (match) {
+                console.log('match!')
                 product = categoryData[a]
                 break
             }
@@ -131,6 +134,8 @@ async function findProduct(task) {
         }
 
         await sleep(150)
+
+        console.log(product['id'])
 
         const productStock = await fetch(`https://www.supremenewyork.com/shop/${product['id']}.json?rnd=${await rndString()}`, {
                 "headers": {
@@ -145,11 +150,13 @@ async function findProduct(task) {
                 timeout: 2500
             })
             .then(async resp => {
+                //console.log(await resp.text())
                 const data = await resp.json()
+                console.log(data)
                 return data
             })
             .catch(e => {
-                console.log(e)
+                console.log('product endpoint',e)
                 return undefined
             })
 
@@ -204,12 +211,12 @@ async function findProduct(task) {
                         if ((size === 'ANY' || size === 'RANDOM' || size === '') && sizes[a]['stock_level'] === 1) {
                             style = style[b]
                             product['size'] = sizes[a]['name']
-                            product['style'] = (productStock['styles'].filter(item => item['id'] === style2[b]))[0]
+                            product['style'] = (productStock['styles'].filter(item => item['id'] === style2[b]))[0]['name']
                             return sizes[a]['id']
                         } else if (name.includes(size) && sizes[a]['stock_level'] === 1 && size !== '') {
                             style = style[b]
                             product['size'] = sizes[a]['name']
-                            product['style'] = (productStock['styles'].filter(item => item['id'] === style2[b]))[0]
+                            product['style'] = (productStock['styles'].filter(item => item['id'] === style2[b]))[0]['name']
                             return sizes[a]['id']
                         }
                     }
@@ -241,7 +248,7 @@ async function findProduct(task) {
                 const keyword = keywords[b].toUpperCase()
                 if (string.includes(keyword)) count++
             }
-            if (count === keywords.length) return true
+            if (count >= keywords.length * 0.75) return true
             else false
         }
 
