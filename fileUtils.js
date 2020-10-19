@@ -341,7 +341,7 @@ async function notify(title, message, url, image) {
 async function discordMessage(data) {
     const settings = store.get('settings')
     const webhook = settings['discordWebhook'].split('/')
-    if (webhook.length >= 5) {
+    if (webhook.length >= 5 && discordNotifications) {
         const webhookClient = new Discord.WebhookClient(webhook[webhook.length - 2], webhook[webhook.length - 1]);
         var embed = new Discord.MessageEmbed()
         embed.setAuthor('BOEHLER IO DESKTOP')
