@@ -19,7 +19,7 @@ window.addEventListener("load", async () => {
             if (!profile) profile = 'personal'
 
             var circleStyle = '#ededed'
-            if (status === 'paypal' || status === 'paid') circleStyle = '#51f396'
+            if (status === 'paypal' || status === 'paid' || status.includes('#')) circleStyle = '#51f396'
             else if (status !== 'stopped') circleStyle = '#ffb273'
             $('#taskTable').append(`<tr id="${data[a]['id']}">
             <td>

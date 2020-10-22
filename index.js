@@ -60,7 +60,7 @@ setInterval(async () => {
         }
     } else if (captchaBank['required'] > 0) {
         const tasks = store.get('tasks')
-        var running = tasks.filter(item => item['status'] !== 'stopped')
+        var running = tasks.filter(item => item['status'] !== 'stopped' && !item['status'].includes('#') && item['status'] !== 'duplicate')
         if (running.length > 0) startHarvester()
         else captchaBank['required'] = 0
     } else if (captchaBank['tokens'].length >= 1) {
