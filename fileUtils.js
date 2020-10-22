@@ -353,8 +353,8 @@ async function discordMessage(data) {
         })
         if (data['orderID']) embed.addField('Order No', data['orderID'])
         if (data['image']) {
-            const attachment = new Discord.MessageAttachment(data['image'], 'taskSuccess.png')
-            embed.setImage('attachment://taskSuccess.png')
+            //embed.attachFiles(data['image'])
+            embed.setImage(data['image'])
         }
         if (data['paypal']) embed.addField('PayPal', `[checkout now](${data['paypal']})`)
         webhookClient.send(embed)
